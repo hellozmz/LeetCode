@@ -8,7 +8,8 @@
 // @lc code=start
 class Solution {
 public:
-    int lengthOfLongestSubstring(string s) {
+    // 滑动窗口
+    int lengthOfLongestSubstring_1(string s) {
         int start = 0, end = 0; // 闭区间
         int len = s.size();
         int max_len = 0;
@@ -27,6 +28,24 @@ public:
             }
         }
 
+        return max_len;
+    }
+
+    // 滑动窗口+hash
+    int lengthOfLongestSubstring(string s) {
+        int max_len = 0, len = s.size();
+        int start(0), end(0);
+        int char_hash[256] = {0};   // 0代表没有字符，1代表有字符
+        while ((start <= end) && (end < len)) {
+            if (char_hash[s[end]] == 0) {
+                char_hash[s[end]] = 1;
+                max_len = std::max(max_len, end-start+1);
+                end++;
+            } else {
+                char_hash[s[start]] = 0;
+                start++;
+            }
+        }
         return max_len;
     }
 };
