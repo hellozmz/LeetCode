@@ -77,7 +77,7 @@ public:
         return -1;
     }
 
-    // 一个相当track的方法
+    // 一个相当trick的方法
     vector<int> searchRange_1(vector<int> &nums, int target) {
         auto begin = lower_bound(nums.begin(), nums.end(), target);
         auto end   = upper_bound(nums.begin(), nums.end(), target);
