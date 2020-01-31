@@ -79,9 +79,9 @@ public:
 
     // 一个相当trick的方法
     vector<int> searchRange_1(vector<int> &nums, int target) {
-        auto begin = lower_bound(nums.begin(), nums.end(), target);
-        auto end   = upper_bound(nums.begin(), nums.end(), target);
-        if (begin == end) return {-1, -1};
+        auto begin = lower_bound(nums.begin(), nums.end(), target); // 第一个比目标值小的索引
+        auto end   = upper_bound(nums.begin(), nums.end(), target); // 第一个比目标值大的索引
+        if (begin == end) return {-1, -1};  // 找不到都返回末尾索引
         return {(int)(begin - nums.begin()), (int)(end - nums.begin() - 1)};
     }
 };
