@@ -14,4 +14,4 @@
 
 ## 计划
 
-参考链接：https://leetcode.com/problemset/top-100-liked-questions/
+参考链接：https://leetcode-cn.com/problemset/hot-100/
