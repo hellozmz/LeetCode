@@ -48,7 +48,15 @@ public:
 
     vector<int> searchRange(vector<int>& nums, int target) {
         if (nums.size() == 0)   return std::vector<int>{-1, -1};
-        return std::vector<int>{-1, -1};
+        int left = Left(nums, target);
+        int right = Right(nums, target);
+        std::cout << "left=" << left << ", right=" << right << std::endl;
+        if ((left < 0) || (left >= nums.size())) {
+            return std::vector<int>{-1, -1};
+        } else if (nums[left] != target) {
+            return std::vector<int>{-1, -1};
+        }
+        return std::vector<int>{left, right};
     }
 
     // 根据输入的有序数组和目标，返回目标的下标。
@@ -72,8 +80,9 @@ public:
 // @lc code=end
 
 int main() {
-    std::vector<int> nums{1,2,2,2,3};
-    int target = 2;
+    std::vector<int> nums{2, 2};
+    // std::vector<int> nums{1,2,2,2,3};
+    int target = 3;
     Solution s;
     std::cout << "BinarySearch="<< s.BinarySearch(nums, target) << std::endl;
     std::cout << "Left=" << s.Left(nums, target) << std::endl;
