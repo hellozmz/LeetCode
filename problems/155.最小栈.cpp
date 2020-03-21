@@ -42,52 +42,58 @@ class MinStack {
 public:
     /** initialize your data structure here. */
     MinStack() {
-        stack_.reserve(10000);
-        min_value_.reserve(10000);
+        // stack_.reserve(10000);
+        // min_value_.reserve(10000);
     }
     
     void push(int x) {
         int current_min = x;
-        if (pos_ >= 0) {
-            current_min = std::min(min_value_[pos_], x);
+        if (min_value_.size() > 0) {
+            current_min = std::min(min_value_.back(), x);
         }
 
-        if (stack_.capacity() > pos_ + 1) {
-            ++pos_;
-            stack_[pos_] = x;
-            min_value_[pos_] = current_min;
-        } else {
-            stack_.push_back(x);
-            min_value_.push_back(current_min);
-            ++pos_;
-        }
+        // if (stack_.capacity() > pos_ + 1) {
+        //     ++pos_;
+        //     stack_[pos_] = x;
+        //     min_value_[pos_] = current_min;
+        // } else {
+        //     stack_.push_back(x);
+        //     min_value_.push_back(current_min);
+        //     ++pos_;
+        // }
+        stack_.push_back(x);
+        min_value_.push_back(current_min);
     }
     
     void pop() {
-        --pos_;
-        if (pos_ < 0) {
-            pos_ = -1;
-        }
+        // --pos_;
+        // if (pos_ < 0) {
+        //     pos_ = -1;
+        // }
+        stack_.pop_back();
+        min_value_.pop_back();
     }
     
     int top() {
-        if (pos_ < 0) {
-            return 0;
-        }
-        return stack_[pos_];
+        // if (pos_ < 0) {
+        //     return 0;
+        // }
+        // return stack_[pos_];
+        return stack_.back();
     }
     
     int getMin() {
-        std::cout << "pos=" << pos_ << std::endl;
-        if (pos_ < 0) {
-            return 0;
-        }
-        return min_value_[pos_];
+        // std::cout << "pos=" << pos_ << std::endl;
+        // if (pos_ < 0) {
+        //     return 0;
+        // }
+        // return min_value_[pos_];
+        return min_value_.back();
     }
 private:
     std::vector<int> stack_;
     std::vector<int> min_value_;
-    int pos_ = -1;  // 当前索引
+    // int pos_ = -1;  // 当前索引，初始化为-1
 };
 
 /**
