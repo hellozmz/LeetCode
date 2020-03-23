@@ -38,7 +38,7 @@
 // @lc code=start
 class Solution {
 public:
-    int rob(vector<int>& nums) {
+    int rob0(vector<int>& nums) {
         if (nums.size() == 0) {
             return 0;
         }
@@ -61,6 +61,16 @@ public:
             second_pos = i;
         }
         return money;
+    }
+    int rob(vector<int>& nums) {
+        int pre_max = 0;
+        int cur_max = 0;
+        for (auto money : nums) {
+            int temp = cur_max;
+            cur_max = std::max(pre_max+money, cur_max);
+            pre_max = temp;
+        }
+        return cur_max;
     }
 };
 // @lc code=end
