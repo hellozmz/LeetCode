@@ -29,6 +29,8 @@
  * 进阶：
  * 你能否用 O(n) 时间复杂度和 O(1) 空间复杂度解决此题？
  * 
+ * 找到中间的数字，然后翻转后半部分的数据
+ * 找到中间的节点使用快慢指针
  */
 
 // @lc code=start
@@ -43,35 +45,29 @@
 class Solution {
 public:
     bool isPalindrome(ListNode* head) {
-        int len = 0;
-        auto cur_ptr = head;
-        while (cur_ptr) {
-            cur_ptr = cur_ptr->next;
-            ++len;
-        }
-        if (len == 1 || len == 0) {
+        if (!head || !head->next) {
             return true;
         }
-        int mid = len / 2;
-        cur_ptr = head;
-        while (--mid > 0) {
-            cur_ptr = cur_ptr->next;
+        ListNode* slow = head;
+        ListNode* fast = head;
+        while (fast->next && fast->next->next) {
+            slow = slow->next;
+            fast = fast->next->next;
         }
+        slow->next = reverse(slow->next);
         // printNode(head);
-        // printNode(cur_ptr->next);
-        if (len%2) cur_ptr = cur_ptr->next;
-        cur_ptr->next = reverse(cur_ptr->next);
-        // printNode(head);
-        auto tmp_head_ptr = cur_ptr->next;
-        while (tmp_head_ptr) {
+        // printNode(slow);    // left
+        // printNode(right);
+        auto right = slow->next;
+        while (right) {
             // printNode(head);
-            // printNode(tmp_head_ptr);
-            if (head->val != tmp_head_ptr->val) {
+            // printNode(right);
+            if (head->val != right->val) {
                 // cur_ptr->next = reverse(cur_ptr->next);
                 return false;
             }
             head = head->next;
-            tmp_head_ptr = tmp_head_ptr->next;
+            right = right->next;
         }
         // cur_ptr->next = reverse(cur_ptr->next);
         return true;
