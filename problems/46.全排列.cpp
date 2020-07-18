@@ -40,12 +40,13 @@ public:
     }
 
     void dfs(std::vector<std::vector<int>>& result, int start,
-             std::vector<int> nums) {
-        if (start >= nums.size()) {
+             std::vector<int>& nums) {
+        if (start == nums.size()) {
             result.push_back(nums);
             return;
         }
         for (int i = start; i < nums.size(); ++i) {
+            // 先交换位置，然后再交换回来，实现全排列的逻辑
             std::swap(nums[i], nums[start]);
             dfs(result, start + 1, nums);
             std::swap(nums[start], nums[i]);
