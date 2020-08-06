@@ -49,7 +49,25 @@
 class Solution {
 public:
     bool wordBreak(string s, vector<string>& wordDict) {
-        
+        std::unordered_set<std::string> dict;
+        for (auto word : wordDict) {
+            dict.insert(word);
+        }
+
+        int len = s.size();
+        std::vector<int> dp(len+1, 0);
+        dp[0] = 1;
+        // i 代表当前要查看的长度
+        for (int i = 1; i <= len; ++i) {
+            // j 代表遍历的具体的位置，在dp中是[1, len]位置对应的s
+            for (int j = 0; j < i; ++j) {
+                // 字符串边界(j, i]
+                if (dp[j] && dict.find(s.substr(j, i-j)) != dict.end()) {
+                    dp[i] = 1;
+                }
+            }
+        }
+        return dp[len];
     }
 };
 // @lc code=end
