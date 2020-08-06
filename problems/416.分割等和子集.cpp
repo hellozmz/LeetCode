@@ -65,34 +65,33 @@ public:
             return false;
         }
         if (max * 2 == sum) {
-            // return true;
+            // std::cout << "max=" << max << ", sum=" << sum << std::endl;
+            return true;
         }
         int target = sum / 2;
-        std::vector<std::vector<int>> dp(len, std::vector<int>(target+1, 0));
+        std::vector<int> dp(target+1, 0);
+        dp[0] = 1;
+        dp[nums[0]] = 1;
+        for (int i = 1; i < len; ++i) {
+            // j 代表的是和
+            for (int j = target; j >= 0; --j) {
+                if (j - nums[i] >= 0 && dp[j - nums[i]]) {
+                    dp[j] = 1;
+                }
 
-        // 为了后续
-        // dp[0][0] = true;
+                // std::cout << "i=" << i << std::endl;
+                // for (int k = 0; k <= target; ++k) {
+                //     std::cout << dp[k] << " ";
+                // }
 
-        // todo: 需要压缩
-        for (int i = 0; i < len; ++i) {
-            for (int j = 0; j <= target; ++j) {
-                if (i == 0) {
-                    dp[i][nums[i]] = true;
-                    continue;
-                }
-                if (dp[i-1][j]) {
-                    dp[i][j] = true;
-                }
-                if (j-nums[i] >= 0 && dp[i-1][j-nums[i]]) {
-                    dp[i][j] = true;
-                }
-                if (j == target && dp[i][j]) {
+                if (dp[target]) {
+                    // std::cout << "i=" << i << ", j=" << j << std::endl;
                     return true;
                 }
-                // std::cout << dp[i][j] << " ";
             }
             // std::cout << std::endl;
         }
+
         return false;
     }
 };
