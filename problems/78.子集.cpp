@@ -55,7 +55,7 @@ public:
         }
     }
 
-    vector<vector<int>> subsets(vector<int>& nums) {
+    vector<vector<int>> subsets0(vector<int>& nums) {
         std::vector<std::vector<int>> result;
         int len = nums.size();
         for (int target_len = 0; target_len <= len; ++target_len) { // 数组长度为0～len
@@ -63,6 +63,22 @@ public:
             backtrace(result, path, nums, 0, target_len);
         }
         return result;
+    }
+
+    std::vector<std::vector<int>> result; 
+    vector<vector<int>> subsets(vector<int>& nums) {
+        std::vector<int> path;
+        bt(nums, 0, path);
+        return result;
+    }
+
+    void bt(const std::vector<int>& nums, int start, std::vector<int> path) {
+        result.push_back(path);
+        for (int i = start; i < nums.size(); ++i) {
+            path.push_back(nums[i]);
+            bt(nums, i+1, path);
+            path.pop_back();
+        }
     }
 };
 // @lc code=end
