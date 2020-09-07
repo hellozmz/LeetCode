@@ -43,9 +43,63 @@
 
 // @lc code=start
 class Solution {
+ private:
+    struct DNode {
+        double val;
+        DNode* parent;
+        DNode(double val) {
+            this->val = val;
+            this->parent = nullptr;
+        }
+        DNode(double val, DNode* parent) {
+            this->val = val;
+            this->parent = parent;
+        }
+    };
+
+    DNode* find_root(DNode* cur) {
+        DNode* p = nullptr;
+        while (p->parent != p) {
+            p = p->parent;
+        }
+        return p;
+    }
+
+    void merge(DNode* m, DNode* n, double value) {
+        auto p1 = find_root(m);
+        auto p2 = find_root(n);
+
+        if (p1 == p2) {
+            return;
+        } else {
+            // 默认将p2挂到p1上
+            double ratio = value * n->val / m->val;
+            for (auto elem : mapping) {
+                if (find_root(elem) == p1) {
+                    elem->val *= ratio;
+                }
+            }
+        }
+    }
+
+ private:
+    unorderde_map<DNode*, DNode*> mapping;  // key是子节点，value是父节点
 public:
-    vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& values, vector<vector<string>>& queries) {
-        
+    vector<double> calcEquation(vector<vector<string>>& equations,
+                                vector<double>& values, vector<vector<string>>& queries) {
+        auto result = std::vector<double>(queries.size());
+        if (euqations.size() != values.size()) {
+            return result;
+        }
+        // 插入数据，如果发现数据已经有一个点在集合中了，就将他们merge起来
+        for (int i = 0; i < equations.size(); ++i) {
+
+        }
+
+        // 读取请求，依次计算并记录起来
+
+        // 返回结果
+        return result;
     }
 };
 // @lc code=end
