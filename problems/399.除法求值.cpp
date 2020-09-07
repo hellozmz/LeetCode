@@ -49,7 +49,7 @@ class Solution {
         DNode* parent;
         DNode(double val) {
             this->val = val;
-            this->parent = nullptr;
+            this->parent = this;
         }
         DNode(double val, DNode* parent) {
             this->val = val;
@@ -57,46 +57,72 @@ class Solution {
         }
     };
 
-    DNode* find_root(DNode* cur) {
-        DNode* p = nullptr;
+    DNode* find_root(DNode* p) {
         while (p->parent != p) {
             p = p->parent;
         }
         return p;
     }
 
-    void merge(DNode* m, DNode* n, double value) {
-        auto p1 = find_root(m);
-        auto p2 = find_root(n);
+    void merge(std::string m, std::string n, double value) {
+        auto p1 = find_root(mapping[m]);
+        auto p2 = find_root(mapping[n]);
 
         if (p1 == p2) {
             return;
         } else {
             // 默认将p2挂到p1上
-            double ratio = value * n->val / m->val;
+            double ratio = value * mapping[n]->val / mapping[m]->val;
+            // std::cout << "ratio=" << ratio << std::endl;
             for (auto elem : mapping) {
-                if (find_root(elem) == p1) {
-                    elem->val *= ratio;
+                if (find_root(elem.second) == p1) {
+                    elem.second->val *= ratio;
                 }
             }
+            mapping[n]->parent = mapping[m];
         }
     }
 
  private:
-    unorderde_map<DNode*, DNode*> mapping;  // key是子节点，value是父节点
+    unordered_map<std::string, DNode*> mapping;  // key是子节点，value是父节点
 public:
     vector<double> calcEquation(vector<vector<string>>& equations,
                                 vector<double>& values, vector<vector<string>>& queries) {
         auto result = std::vector<double>(queries.size());
-        if (euqations.size() != values.size()) {
+        if (equations.size() != values.size()) {
             return result;
         }
         // 插入数据，如果发现数据已经有一个点在集合中了，就将他们merge起来
         for (int i = 0; i < equations.size(); ++i) {
-
+            std::string a = equations[i][0];
+            std::string b = equations[i][1];
+            if (mapping.count(a) == 0 && mapping.count(b) == 0) {
+                mapping[a] = new DNode(values[i]);
+                mapping[b] = new DNode(1.0, mapping[a]);
+            } else if (mapping.count(a) > 0 && mapping.count(b) == 0) {
+                mapping[b] = new DNode(mapping[a]->val / values[i], mapping[a]);
+            } else if (mapping.count(a) == 0 && mapping.count(b) > 0) {
+                mapping[a] = new DNode(mapping[b]->val * values[i]);
+                // 注意下面
+                mapping[a]->parent = mapping[b];
+            } else if (mapping.count(a) > 0 && mapping.count(b) > 0) {
+                merge(a, b, values[i]);
+            }
         }
 
+        // for (auto elem : mapping) {
+        //     std::cout << elem.first << "=" << elem.second->val << std::endl;
+        // }
+
         // 读取请求，依次计算并记录起来
+        for (int i = 0; i < queries.size(); ++i) {
+            if (mapping.count(queries[i][0]) > 0 && mapping.count(queries[i][1]) > 0 &&
+                find_root(mapping[queries[i][0]]) == find_root(mapping[queries[i][1]])) {
+                result[i] = (mapping[queries[i][0]]->val / mapping[queries[i][1]]->val);
+            } else {
+                result[i] = (-1.0);
+            }
+        }
 
         // 返回结果
         return result;
