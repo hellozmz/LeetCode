@@ -37,8 +37,34 @@
 class Solution {
 public:
     vector<vector<int>> threeSum(vector<int>& nums) {
-        
+        vector<vector<int>> result;
+        int size = nums.size();
+        if (size < 3) {
+            return result;
+        }
+        std::sort(nums.begin(), nums.end());
+        for (int first = 0; first < size; ++first) {
+            if (first != 0 && nums[first] == nums[first - 1]) {
+                continue;
+            }
+            int third = size - 1;
+            for (int second = first + 1; second < size; ++second) {
+                if (second != first + 1 && nums[second] == nums[second - 1]) {
+                    continue;
+                }
+                while (nums[first] + nums[second] + nums[third] > 0 && third > second) {
+                    --third;
+                }
+                if (second >= third) {
+                    break;
+                }
+
+                if (nums[first] + nums[second] + nums[third] == 0) {
+                    result.push_back({nums[first], nums[second], nums[third]});
+                } 
+            }
+        }
+        return result;
     }
 };
 // @lc code=end
-
