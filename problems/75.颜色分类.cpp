@@ -38,7 +38,36 @@
 // @lc code=start
 class Solution {
 public:
+    void swap(vector<int>& nums, int i, int j) {
+        int tmp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = tmp;
+    }
+
     void sortColors(vector<int>& nums) {
+        int size = nums.size();
+        int index0 = 0;
+        int index2 = size - 1;
+        int cur = 0;
+        while (cur <= index2) {
+            if (nums[cur] == 0) {
+                swap(nums, cur, index0);
+                ++index0;
+                ++cur;
+            } else if (nums[cur] == 2) {
+                // 注意这里的操作，当当前数据是2的时候，不要更新当前的cur指针，当前的数据还需要处理一下
+                swap(nums, cur, index2);
+                --index2;
+            } else {
+                ++cur;
+            }
+            
+            // cout << "cur=" << cur << ", index0=" << index0 << ", index2=" << index2 << endl;
+        }
+        return;
+    }
+
+    void sortColors_old(vector<int>& nums) {
         int len = nums.size();
         if (len < 2) {
             return;

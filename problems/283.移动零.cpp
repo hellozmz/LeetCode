@@ -33,6 +33,27 @@
 class Solution {
 public:
     void moveZeroes(vector<int>& nums) {
+        int size = nums.size();
+        int head = 0;
+        int cur = 0;
+        while (cur < size) {
+            if (nums[cur] == 0) {
+                ++cur;
+            } else {
+                nums[head++] = nums[cur++];
+            }
+        }
+        while (head < size) {
+            nums[head++] = 0;
+        }
+        // for (auto elem : nums) {
+        //     cout << elem << " ";
+        // }
+        // cout << endl;
+        return;
+    }
+
+    void moveZeroes_old(vector<int>& nums) {
         int len = nums.size();
         if (len == 0 || len == 1) {
             return;
