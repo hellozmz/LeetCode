@@ -55,7 +55,7 @@ public:
         return r_ptr;
     }
 
-    ListNode* reverseList(ListNode* head) {
+    ListNode* reverseList_old(ListNode* head) {
         ListNode* next = head->next;
         if (!head || !next) {
             return head;
@@ -64,6 +64,30 @@ public:
         head->next->next = head;
         head->next = nullptr;
         return ptr;
+    }
+
+    ListNode* reverseList_old1(ListNode* head) {
+        ListNode dum;
+        ListNode* cur = head;
+        while (cur) {
+            auto tmp = cur->next;
+            cur->next = dum.next;
+            dum.next = cur;
+            cur = tmp;
+        }
+
+        return dum.next;
+    }
+
+    ListNode* reverseList(ListNode* head) {
+        ListNode dumb, *ptr = head;
+        while (ptr) {
+            ListNode* tmp = ptr->next;
+            ptr->next = dumb.next;
+            dumb.next = ptr;
+            ptr = tmp;
+        }
+        return dumb.next;
     }
 };
 // @lc code=end
