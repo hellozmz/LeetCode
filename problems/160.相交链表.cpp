@@ -85,6 +85,27 @@
 class Solution {
 public:
     ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        ListNode *ptrA = headA, *ptrB = headB;
+        bool firstA = true, firstB = true;
+        while (ptrA && ptrB) {
+            if (ptrA == ptrB) {
+                return ptrA;
+            }
+            ptrA = ptrA->next;
+            ptrB = ptrB->next;
+            if (!ptrA && firstA) {
+                ptrA = headB;
+                firstA = false;
+            }
+            if (!ptrB && firstB) {
+                ptrB = headA;
+                firstB = false;
+            }
+        }
+        return nullptr;
+    }
+
+    ListNode *getIntersectionNode_old1(ListNode *headA, ListNode *headB) {
         int lenA = 0, lenB = 0;
         ListNode *ptrA = headA, *ptrB = headB;
         while (ptrA) {
