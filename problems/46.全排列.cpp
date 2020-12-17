@@ -33,7 +33,31 @@
 // @lc code=start
 class Solution {
 public:
+    void new_dfs(std::vector<int>& nums, int start, std::vector<std::vector<int>>& result) {
+        if (start == nums.size()) {
+            result.push_back(nums);
+            return;
+        }
+        for (int i = start; i < nums.size(); ++i) {
+            std::swap(nums[start], nums[i]);
+            new_dfs(nums, start + 1, result);
+            std::swap(nums[start], nums[i]);
+        }
+    }
+
     vector<vector<int>> permute(vector<int>& nums) {
+        std::vector<std::vector<int>> result;
+        new_dfs(nums, 0, result);
+        return result;
+    }
+
+
+
+
+
+
+
+    vector<vector<int>> permute_old(vector<int>& nums) {
         std::vector<std::vector<int>> result;
         dfs(result, 0, nums);
         return result;

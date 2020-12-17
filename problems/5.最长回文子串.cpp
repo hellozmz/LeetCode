@@ -34,6 +34,36 @@
 class Solution {
 public:
     string longestPalindrome(string s) {
+        int r_start = 0, r_len = 0;
+        int end = s.size();
+        // cout << "s=" << s << ", end=" << end << endl;
+        std::vector<std::vector<int>> dp(end, std::vector<int>(end));
+        for (int len = 0; len < end; ++len) {
+            for (int start = 0; start + len < end; ++start) {
+                if (len == 0) {
+                    dp[start][start + len] = 1;
+                } else if (len == 1) {
+                    if (s[start] == s[start + len]) {
+                        dp[start][start+len] = 1;
+                    }
+                } else {
+                    if (s[start] == s[start + len]) {
+                        dp[start][start+len] = dp[start+1][start+len-1];
+                    }
+                }
+                if (dp[start][start+len] == 1 && len > r_len) {
+                    r_start = start;
+                    r_len = len;
+                }
+                // cout << "start=" << start << ", len=" << len
+                //     << ", r_start=" << r_start << ", r_len=" << r_len
+                //     << ", dp=" << dp[start][start+len] << endl;
+            }
+        }
+        return s.substr(r_start, r_len + 1);
+    }
+
+    string longestPalindrome_old(string s) {
         if (s.size() <= 1) {
             return s;
         }
@@ -66,3 +96,27 @@ public:
 };
 // @lc code=end
 
+class Solution {
+public:
+    string longestPalindrome(string s) {
+        int n = s.size();
+        vector<vector<int>> dp(n, vector<int>(n));
+        string ans;
+        for (int l = 0; l < n; ++l) {
+            for (int i = 0; i + l < n; ++i) {
+                int j = i + l;
+                if (l == 0) {
+                    dp[i][j] = 1;
+                } else if (l == 1) {
+                    dp[i][j] = (s[i] == s[j]);
+                } else {
+                    dp[i][j] = (s[i] == s[j] && dp[i + 1][j - 1]);
+                }
+                if (dp[i][j] && l + 1 > ans.size()) {
+                    ans = s.substr(i, l + 1);
+                }
+            }
+        }
+        return ans;
+    }
+};

@@ -29,6 +29,7 @@
 // @lc code=start
 class Solution {
 public:
+/*
     void swap(vector<int>& nums, int a, int b) {
         int tmp = nums[a];
         nums[a] = nums[b];
@@ -41,7 +42,7 @@ public:
         }
     }
 
-    void nextPermutation(vector<int>& nums) {
+    void nextPermutation_old(vector<int>& nums) {
         // [1,3,2]
 
         int low_index = 0;      // 从后向前看，第一个乱序的索引位置
@@ -77,6 +78,62 @@ public:
         // }
         // cout << endl;
         return;
+    }
+*/
+    void print(std::vector<int>& v) {
+        for (int i = 0; i < v.size(); ++i) {
+            cout << v[i] << " ";
+        }
+        cout << endl;
+    }
+/**
+[1,2,3]
+[1,3,2]
+[2,1,3]
+[2,3,1]
+[3,1,2]
+[3,2,1]
+*/
+    void nextPermutation(vector<int>& nums) {
+        int size = nums.size();
+        if (size <= 1) {
+            return;
+        }
+        // 找到最小的位置
+        int index = size - 2;   // index 最终指向的是不满足条件的位置
+        while (index >= 0 && nums[index] >= nums[index + 1]) {
+            --index;
+        }
+        if (index >= 0) {
+            int i = size - 1;
+            while (i >= 0 && nums[index] >= nums[i]) {
+                --i;
+            }
+            int x = nums[index];
+            nums[index] = nums[i];
+            nums[i] = x;
+        }
+        for (int i = index + 1; i <= (size + index) / 2; ++i) {
+            int x = nums[i];
+            nums[i] = nums[size + index - i];
+            nums[size + index - i] = x;
+        }
+        return;
+    }
+
+    void nextPermutationxxx(vector<int>& nums) {
+        int i = nums.size() - 2;
+        while (i >= 0 && nums[i] >= nums[i + 1]) {
+            i--;
+        }
+        if (i >= 0) {
+            int j = nums.size() - 1;
+            while (j >= 0 && nums[i] >= nums[j]) {
+                j--;
+            }
+            swap(nums[i], nums[j]);
+        }
+        reverse(nums.begin() + i + 1, nums.end());
     }
 };
 // @lc code=end

@@ -39,6 +39,27 @@
 class Solution {
 public:
     int minSubArrayLen(int s, vector<int>& nums) {
+        if (nums.size() == 0) {
+            return 0;
+        }
+        int len = INT_MAX;
+        int left = 0, right = 0;
+        int sum = 0;
+        while (right < nums.size()) {
+            sum += nums[right++];
+            while (sum >= s) {
+                len = std::min(len, right - left);
+                sum -= nums[left++];
+            }
+            // cout << "left=" << left << ", right=" << right << ",len=" << len
+            //     << ", sum=" << sum << endl;
+        }
+
+        return len == INT_MAX ? 0 : len;
+    }
+
+
+    int minSubArrayLen_old(int s, vector<int>& nums) {
         int size = nums.size();
         if (size == 0) {
             return 0;
