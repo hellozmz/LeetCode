@@ -43,7 +43,7 @@
  */
 class Solution {
 public:
-    ListNode* removeNthFromEnd(ListNode* head, int n) {
+    ListNode* removeNthFromEnd_old(ListNode* head, int n) {
         ListNode* dumb = new ListNode(-1, head);
         ListNode* first = head;
         ListNode* second = dumb;
@@ -62,6 +62,25 @@ public:
             second->next = second->next->next;
         return dumb->next;
     }
+
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode dumb, *first, *second;
+        dumb.next = head;
+        first = dumb.next;
+        second = &dumb;
+        while (n-- > 0) {
+            first = first->next;
+        }
+        while (first) {
+            first = first->next;
+            second = second->next;
+        }
+        if (second && second->next) {
+            second->next = second->next->next;
+        }
+        return dumb.next;
+    }
+
 };
 // @lc code=end
 

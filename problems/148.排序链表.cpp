@@ -37,7 +37,7 @@
  *     ListNode(int x) : val(x), next(NULL) {}
  * };
  */
-class Solution {
+class Solution1 {
 public:
     ListNode* cut(ListNode* head, int size) {
         auto p = head;
@@ -106,5 +106,14 @@ public:
         return dummy.next;
     }
 };
+
+class Solution {
+public:
+    // 使用归并的方式，将
+    ListNode* sortList(ListNode* head) {
+
+    }
+};
+
 // @lc code=end
 

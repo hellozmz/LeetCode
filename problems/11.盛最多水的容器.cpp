@@ -35,21 +35,37 @@
 class Solution {
 public:
     int maxArea(vector<int>& height) {
-        int len = height.size();
-        int left = 0, right = len - 1;
-        int area = 0;
+        int maxarea = 0;
+        int left = 0, right = height.size() - 1;
         while (left < right) {
-            area = std::max(area,
-                            std::min(height[left], height[right]) *
-                            (right - left));
-            if (height[left] < height[right]) {
-                ++left;
-            } else {
+            // int h = std::min(height[left], height[right]);
+            // maxarea = std::max(maxarea, h * (right - left));
+            if (height[left] > height[right]) {
+                maxarea = std::max(maxarea, height[right] * (right - left));
                 --right;
+            } else {
+                maxarea = std::max(maxarea, height[left] * (right - left));
+                ++left;
             }
         }
-        return area;
+        return maxarea;
     }
+    // int maxArea_old(vector<int>& height) {
+    //     int len = height.size();
+    //     int left = 0, right = len - 1;
+    //     int area = 0;
+    //     while (left < right) {
+    //         area = std::max(area,
+    //                         std::min(height[left], height[right]) *
+    //                         (right - left));
+    //         if (height[left] < height[right]) {
+    //             ++left;
+    //         } else {
+    //             --right;
+    //         }
+    //     }
+    //     return area;
+    // }
 };
 // @lc code=end
 

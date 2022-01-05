@@ -1,0 +1,1 @@
+Lorem [31mipsum [0mdolor[32m sit amet[0m.

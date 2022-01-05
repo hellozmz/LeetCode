@@ -85,7 +85,7 @@ public:
         }
         return false;
     }
-    ListNode *detectCycle(ListNode *head) {
+    ListNode *detectCycle_old(ListNode *head) {
         ListNode* in = nullptr;
         if (hasCycle(head)) {
             ListNode* h1 = head;
@@ -97,6 +97,29 @@ public:
             in = h1;
         }
         return in;
+    }
+
+    ListNode *detectCycle(ListNode *head) {
+        ListNode *fast = head, *slow = head;
+        bool has_meet = false;
+        while (fast && fast->next) {
+            fast = fast->next->next;
+            slow = slow->next;
+            if (fast == slow) {
+                has_meet = true;
+                break;
+            }
+        }
+        if (has_meet) {
+            slow = head;
+            while (fast && (fast != slow)) {
+                fast = fast->next;
+                slow = slow->next;
+            }
+        } else {
+            fast = nullptr;
+        }
+        return fast;
     }
 };
 // @lc code=end
