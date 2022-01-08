@@ -84,7 +84,24 @@
 class Solution {
 public:
     ListNode *detectCycle(ListNode *head) {
-        
+        ListNode *first = head;
+        ListNode *second = head;
+        while (first != nullptr && first->next != nullptr) {
+            first = first->next->next;
+            second = second->next;
+            if (first == second) {
+                break;
+            }
+        }
+        if (first == nullptr || first->next == nullptr) {
+            return nullptr;
+        }
+        first = head;
+        while (first != second) {
+            first = first->next;
+            second = second->next;
+        }
+        return first;
     }
 };
 // @lc code=end
