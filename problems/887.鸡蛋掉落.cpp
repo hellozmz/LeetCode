@@ -6,11 +6,11 @@
  * https://leetcode-cn.com/problems/super-egg-drop/description/
  *
  * algorithms
- * Hard (28.78%)
+ * Hard (28.83%)
  * Likes:    530
  * Dislikes: 0
  * Total Accepted:    34.6K
- * Total Submissions: 120.1K
+ * Total Submissions: 120.2K
  * Testcase Example:  '1\n2'
  *
  * 你将获得 K 个鸡蛋，并可以使用一栋从 1 到 N  共有 N 层楼的建筑。
@@ -67,39 +67,33 @@
 // @lc code=start
 class Solution {
 public:
-    std::unordered_map<int, int> dp;
-    int superEggDrop(int K, int N) {
-        return helper(K, N);
-    }
-    int helper(int K, int N) {
-        if (dp.count(100 * N + K) == 0) {
-            int ans = 0;
-            if (N == 0) {
-                ans = 0;
-            } else if (K == 1) {
-                ans = N;
-            } else {
-                int low = 1, high = N;
-                while (low + 1 < high) {
-                    int mid = (high + low) / 2;
-                    int t1 = helper(K - 1, mid - 1);    // mid层到1层
-                    int t2 = helper(K, N - mid);        // mid层到N层
+    int dp(int K, int N) {
+        int ans = 0;
+        if (N == 0) {
+            ans = 0;
+        } else if (K == 1) {
+            ans = N;
+        } else {
+            int low = 1, high = N;
+            while (low + 1 < high) {
+                int mid = (high + low) / 2;
+                int t1 = dp(K - 1, mid - 1);
+                int t2 = dp(K, N - mid);
 
-                    if (t1 < t2) {
-                        low = mid;  // 还要从mid开始
-                    } else if (t1 > t2) {
-                        high = mid;
-                    } else {
-                        low = high = mid;
-                    }
+                if (t1 < t2) {
+                    low = mid;
+                } else if (t1 > t2) {
+                    high = mid;
+                } else {
+                    high = low = mid;
                 }
-
-                ans = 1 + std::min(std::max(helper(K - 1, low - 1), helper(K, N - low)),
-                                   std::max(helper(K - 1, high - 1), helper(K, N - high)));
             }
-            dp[100 * N + K] = ans;
+            ans = 1 + min(max(dp(K-1, low-1), dp(K, N-low)),
+                                max(dp(K-1, high-1), dp(K, N-high)));
         }
-        return dp[100 * N + K];
+    }
+    int superEggDrop(int K, int N) {
+        return dp(K, N);
     }
 };
 // @lc code=end
@@ -112,19 +106,19 @@ class Solution {
             if (N == 0) ans = 0;
             else if (K == 1) ans = N;
             else {
-                int lo = 1, hi = N;
-                while (lo + 1 < hi) { 
-                    int x = (lo + hi) / 2;
-                    int t1 = dp(K-1, x-1);
-                    int t2 = dp(K, N-x);
+                int low = 1, high = N;
+                while (low + 1 < high) {
+                    int mid = (low + high) / 2;
+                    int t1 = dp(K-1, mid-1);
+                    int t2 = dp(K, N-mid);
 
-                    if (t1 < t2) lo = x;
-                    else if (t1 > t2) hi = x;
-                    else lo = hi = x;
+                    if (t1 < t2) low = mid;
+                    else if (t1 > t2) high = mid;
+                    else low = high = mid;
                 }
 
-                ans = 1 + min(max(dp(K-1, lo-1), dp(K, N-lo)),
-                                   max(dp(K-1, hi-1), dp(K, N-hi)));
+                ans = 1 + min(max(dp(K-1, low-1), dp(K, N-low)),
+                                   max(dp(K-1, high-1), dp(K, N-high)));
             }
 
             memo[N * 100 + K] = ans;
