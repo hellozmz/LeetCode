@@ -76,6 +76,53 @@
 // @lc code=start
 class Solution {
 public:
+    int maximalRectangle(vector<vector<char>>& matrix) {
+        int row = matrix.size();
+        if (row == 0) {
+            return 0;
+        }
+        int col = matrix[0].size();
+
+        std::vector<std::vector<int>> left(row, std::vector<int>(col, 0));      // 初始化
+        for (int i = 0; i < row; ++i) {
+            for (int j = 0; j < col; ++j) {
+                if (matrix[i][j] == '1') {
+                    left[i][j] = (j != 0 ? left[i][j-1] + 1 : 1);
+                }
+            }
+        }
+
+        int result = 0;
+        for (int j = 0; j < col; ++j) {
+            // todo: mini stack
+            std::stack<int> stack1;
+            std::vector<int> up(row, 0), down(row, 0);
+
+            for (int i = 0; i < row; ++i) {
+                while (!stack1.empty() && left[stack1.top()][j] >= left[i][j]) {
+                    stack1.pop();    // 把所有的都吐出去（大于等于的都吐出去，下面统一去加进来一个）
+                }
+                up[i] = (stack1.empty() ? -1 : stack1.top());
+                stack1.push(i);
+            }
+
+            stack1 = std::stack<int>();
+            for (int i = row - 1; i >= 0; --i) {
+                while (!stack1.empty() && left[stack1.top()][j] >= left[i][j]) {
+                    stack1.pop();
+                }
+                down[i] = (stack1.empty() ? row : stack1.top());
+                stack1.push(i);
+            }
+
+            for (int i = 0; i < row; ++i) {
+                result = std::max(result, (down[i] - up[i] - 1) * left[i][j]);
+            }
+        }
+
+        return result;
+    }
+
     int maximalRectangle00(vector<vector<char>>& matrix) {
         int result = 0;
         int row = matrix.size();
