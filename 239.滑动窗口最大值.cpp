@@ -88,6 +88,32 @@ public:
             dq.push_back(i);
         }
 
+        std::vector<int> result{nums[dq.front()]};
+        for (int i = k; i < len; ++i) {
+            while (!dq.empty() && nums[dq.back()] <= nums[i]) {
+                dq.pop_back();
+            }
+            dq.push_back(i);
+
+            while (i - dq.front() >= k) {
+                dq.pop_front();
+            }
+            result.push_back(nums[dq.front()]);
+        }
+
+        return result;
+    }
+
+    vector<int> maxSlidingWindow0(vector<int>& nums, int k) {
+        int len = nums.size();
+        std::deque<int> dq;
+        for (int i = 0; i < k; ++i) {
+            while (!dq.empty() && nums[dq.back()] <= nums[i]) {
+                dq.pop_back();
+            }
+            dq.push_back(i);
+        }
+
         std::vector<int> result = {nums[dq.front()]};
         for (int i = k; i < len; ++i) {
             while (!dq.empty() && nums[dq.back()] <= nums[i]) {
@@ -106,3 +132,33 @@ public:
 };
 // @lc code=end
 
+/**
+ * @brief 
+ * class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        int n = nums.size();
+        deque<int> q;
+        for (int i = 0; i < k; ++i) {
+            while (!q.empty() && nums[i] >= nums[q.back()]) {
+                q.pop_back();
+            }
+            q.push_back(i);
+        }
+
+        vector<int> ans = {nums[q.front()]};
+        for (int i = k; i < n; ++i) {
+            while (!q.empty() && nums[i] >= nums[q.back()]) {
+                q.pop_back();
+            }
+            q.push_back(i);
+            while (q.front() <= i - k) {
+                q.pop_front();
+            }
+            ans.push_back(nums[q.front()]);
+        }
+        return ans;
+    }
+};
+
+ */
