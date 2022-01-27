@@ -49,47 +49,45 @@
  */
 class Solution {
 public:
-    int diameterOfBinaryTree0(TreeNode* root) {
-        int length = 0;
-        if (root == nullptr) {
-            return length;
+    int length = 0;
+    int diameterOfBinaryTree(TreeNode* root) {
+        if (!root) {
+            return 0;
         }
-        getMax(root, length);
+        getHeight(root);
         return length;
     }
 
-    void getMax(TreeNode *root, int &length) {
-        int left = len(root->left);
-        int right = len(root->right);
-        length = std::max(length, left + right);
-    }
-
-    int len(TreeNode *root) {
-        if (root == nullptr) {
+    int getHeight(TreeNode *root) {
+        if (!root) {
             return 0;
         }
-        return std::max(len(root->left), len(root->right)) + 1;
+        int left_height = getHeight(root->left);
+        int right_height = getHeight(root->right);
+        length = std::max(length, left_height + right_height);
+        return std::max(left_height, right_height) + 1;
     }
 
-    int ans=0;
+//     int ans=0;
 
-int height(TreeNode* root)
-{
-    if(!root) return 0;
+// int height(TreeNode* root)
+// {
+//     if(!root) return 0;
     
-    int lHeight = height(root->left);
-    int rHeight = height(root->right);
+//     int lHeight = height(root->left);
+//     int rHeight = height(root->right);
     
-    ans= max(ans, lHeight + rHeight);
-    return 1+ max( lHeight , rHeight);
+//     ans= max(ans, 1 + lHeight + rHeight);
+//     return 1+ max( lHeight , rHeight);
 
-}
+// }
 
-int diameterOfBinaryTree(TreeNode* root) {
-    if(!root) return 0;
-    height(root);
-    return ans;
-}
+// int diameterOfBinaryTree0(TreeNode* root) {
+//     if(!root) return 0;
+//     height(root);
+//     return ans-1;
+// }
+
 
 };
 // @lc code=end
