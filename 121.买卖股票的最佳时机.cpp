@@ -58,6 +58,19 @@ public:
             return 0;
         }
         int buy = prices[0];
+        int money = 0;
+        for (int i = 1; i < len; ++i) {
+            buy = std::min(buy, prices[i]);
+            money = std::max(money, prices[i] - buy);
+        }
+        return money;
+    }
+    int maxProfit0(vector<int>& prices) {
+        int len = prices.size();
+        if (len == 0) {
+            return 0;
+        }
+        int buy = prices[0];
         int value = 0;
         for (int price : prices) {
             buy = std::min(buy, price);
