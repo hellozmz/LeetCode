@@ -47,6 +47,7 @@
 class Solution {
 public:
     bool canPartition(vector<int>& nums) {
+        // 巧妙的点是，没有只是对元素进行处理，直接将求和的结果做成了空间中的一个维度，去遍历处理，有了这个思想，题目就很好处理了
         int sum = 0;
         for (auto num : nums) {
             sum += num;
@@ -62,10 +63,10 @@ public:
             int num = nums[i - 1];
             for (int j = 0; j <= mid; ++j) {
                 dp[i][j] = dp[i-1][j];
-                if (j >= num) {
-                    dp[i][j] = (dp[i][j] || dp[i - 1][j - num]);
+                if (j >= num) {         // 避免数组越界
+                    dp[i][j] = (dp[i][j] || dp[i - 1][j - num]);            // 更新当前位置的值
                 }
-                if (dp[i][mid]) {
+                if (dp[i][mid]) {       // 满足条件直接就返回
                     return true;
                 }
             }
