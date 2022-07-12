@@ -207,6 +207,10 @@ struct Node {
     Node* parent;
     double value = 1.0;
 
+    Node() {
+        this->parent = this;
+    }
+
     Node(double val) {
         this->value = val;
         this->parent = this;
@@ -222,26 +226,55 @@ private:
     std::unordered_map<std::string, Node*> mapping;             // 根据名字找到对应的节点
 public:
     vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& values, vector<vector<string>>& queries) {
-        std::vector<double> result(queries.size());
+        std::vector<double> result;
         int len = equations.size();
 
         for (int i = 0; i < len; ++i) {
             std::string a = equations[i][0];
             std::string b = equations[i][1];
-            // todo 构建有向图
+            double val = values.at(i);
+            // todo 构建集合
+            if (mapping.count(b) > 0 && mapping.count(a) == 0) {
+                mapping[a] = new Node(val, mapping[b]);
+            } else if (mapping.count(b) > 0 && mapping.count(a) > 0) {
+                // 注意，这里需要将两个集合合并起来，由于a是分子，让b仍然作为原来的根节点，把a树都合并进去
+                merge(a, b, val);
+            } else if (mapping.count(b) == 0 && mapping.count(a) == 0) {
+                mapping[b] = new Node();
+                mapping[a] = new Node(val, mapping[b]);
+            } else if (mapping.count(b) == 0 && mapping.count(a) > 0) {
+                double ratio = mapping[a]->value / val;       // 用原来a所在的集合去合入b(b没有集合，只有一个节点)
+                mapping[b] = new Node(ratio, mapping[a]->parent);
+            }
         }
 
+        // 获取到返回的结果
         for (int i = 0; i < queries.size(); ++i) {
             std::string a = queries[i][0];
             std::string b = queries[i][1];
 
-            if (mapping.count(a) > 0 && mapping.count(b) > 0 && findParent(a) == findParent(b)) {
-                result.push_back(mapping.count(a)->value / mapping.count(b)->value);
+            if (mapping.count(a) > 0 && mapping.count(b) > 0 && findParent(mapping[a]) == findParent(mapping[b])) {
+                result.push_back(mapping.at(a)->value / mapping.at(b)->value);
             } else {
                 result.push_back(-1.0);
             }
         }
         return result;
+    }
+
+    void merge(std::string a, std::string b, double v) {
+        Node* na = mapping[a];
+        Node* nb = mapping[b];
+        double ratio = v / (na->value * nb->value);
+        if (na->parent == nb) {
+            return;
+        }
+        for (auto item : mapping) {
+            if (item.second->parent == na->parent) {
+                item.second->parent = nb->parent;
+                item.second->value *= ratio;
+            }
+        }
     }
 
     Node* findParent(Node* node) {
