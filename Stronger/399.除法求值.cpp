@@ -206,30 +206,41 @@ class Solution {
     /**
      * @brief 
      * Testcase
-[["a","b"],["e","f"],["b","e"]]
-' +
-  '[3.4,1.4,2.3]
-' +
-  '[["b","a"],["a","f"],["f","f"],["e","e"],["c","c"],["a","c"],["f","e"]]
+[["a","b"],["e","f"],["b","e"]]\n
+[3.4,1.4,2.3]\n
+[["b","a"],["a","f"],["f","f"],["e","e"],["c","c"],["a","c"],["f","e"]]
 Answer
 [0.29412,5.58571,1.00000,1.00000,-1.00000,-1.00000,0.71429]
 Expected Answer
 [0.29412,10.948,1.0,1.0,-1.0,-1.0,0.71429]
+
+Testcase
+[["a","b"],["c","b"],["d","b"],["w","x"],["y","x"],["z","x"],["w","d"]]\n
+[2.0,3.0,4.0,5.0,6.0,7.0,8.0]\n
+[["a","c"],["b","c"],["a","e"],["a","a"],["x","x"],["a","z"]]
+Answer
+[0.66667,0.33333,-1.00000,1.00000,1.00000,0.28571]
+Expected Answer
+[0.66667,0.33333,-1.0,1.0,1.0,0.04464]
      */
 struct Node {
     Node* parent;
     double value = 1.0;
+    std::string name;
 
-    Node() {
+    Node(const std::string& name) {
+        this->name = name;
         this->parent = this;
     }
 
-    Node(double val) {
+    Node(const std::string& name, double val) {
+        this->name = name;
         this->value = val;
         this->parent = this;
     }
 
-    Node(double val, Node* parent) {
+    Node(const std::string& name, double val, Node* parent) {
+        this->name = name;
         this->parent = parent;
         this->value = val;
     }
@@ -246,18 +257,18 @@ public:
             std::string a = equations[i][0];
             std::string b = equations[i][1];
             double val = values.at(i);
-            // todo 构建集合
+            // 构建集合
             if (mapping.count(b) > 0 && mapping.count(a) == 0) {
-                mapping[a] = new Node(val, mapping[b]);
+                mapping[a] = new Node(a, val, mapping[b]);
             } else if (mapping.count(b) > 0 && mapping.count(a) > 0) {
                 // 注意，这里需要将两个集合合并起来，由于a是分子，让b仍然作为原来的根节点，把a树都合并进去
                 merge(a, b, val);
             } else if (mapping.count(b) == 0 && mapping.count(a) == 0) {
-                mapping[b] = new Node();
-                mapping[a] = new Node(val, mapping[b]);
+                mapping[b] = new Node(b);
+                mapping[a] = new Node(a, val, mapping[b]);
             } else if (mapping.count(b) == 0 && mapping.count(a) > 0) {
                 double ratio = mapping[a]->value / val;       // 用原来a所在的集合去合入b(b没有集合，只有一个节点)
-                mapping[b] = new Node(ratio, mapping[a]->parent);
+                mapping[b] = new Node(b, ratio, mapping[a]->parent);
             }
         }
 
@@ -276,16 +287,27 @@ public:
     }
 
     void merge(std::string a, std::string b, double v) {
-        Node* na = mapping[a];
-        Node* nb = mapping[b];
-        double ratio = v / (na->value * nb->value);
-        if (na->parent == nb) {
+        Node* na = mapping[a];          // 分子，权重为v
+        Node* nb = mapping[b];          // 分母，权重为1
+        if (na->parent == nb->parent) {     // 在同一个并查集合中，则不需要再处理了
             return;
         }
+        // double ratio = v * na->value * nb->value / na->parent->value;
+        double ratio = v * nb->value / na->value;
+        // std::cout << "ratio = " <<  ratio << std::endl;
+
+        // 需要提前将原来根的名字记录下来，避免放在里面出现bug
+        std::string old_parent_name = na->parent->name;
         for (auto item : mapping) {
-            if (item.second->parent == na->parent) {
+            // if (item.second->parent->name == na->parent->name) {
+            if (item.second->parent->name == old_parent_name) {
                 item.second->parent = nb->parent;
+                // std::cout << "before name = " << item.first << ", value = " << item.second->value 
+                //     << ", item.second->parent = " << item.second->parent->name
+                //     << ", na->parent = " << na->parent->name << std::endl;
                 item.second->value *= ratio;
+                // std::cout << "after name = " << item.first << ", value = " << item.second->value << std::endl;
+
             }
         }
     }
