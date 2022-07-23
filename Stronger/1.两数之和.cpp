@@ -59,7 +59,7 @@
  */
 
 // @lc code=start
-class Solution {
+class Solution0 {
 public:
     vector<int> twoSum(vector<int>& nums, int target) {
         std::unordered_map<int, int> mapping;
@@ -71,6 +71,23 @@ public:
                 if (i != mapping[target - nums[i]]) {
                     return std::vector<int>{i, mapping[target - nums[i]]};
                 }
+            }
+        }
+        return {0, 0};
+    }
+};
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        std::unordered_map<int, int> mapping;
+        for (int i = 0; i < nums.size(); ++i) {
+            mapping[nums[i]] = i;
+        }
+        for (int i = 0; i < nums.size(); ++i) {
+            int others = target - nums[i];
+            if (mapping.count(others) > 0 && mapping[others] != i) {
+                return {i, mapping.at(others)};
             }
         }
         return {0, 0};

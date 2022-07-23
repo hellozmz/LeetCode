@@ -72,7 +72,7 @@
  */
 
 // @lc code=start
-class Solution {
+class Solution0 {
 public:
     double findMedianSortedArrays00(vector<int>& nums1, vector<int>& nums2) {
         int total=nums1.size()+nums2.size();
@@ -97,7 +97,7 @@ public:
         if (nums1.size() == begin1) {
             return nums2[begin2+k-1];
         }
-        if (nums1.size() - begin1 > nums2.size() - begin2) {        // 第二个数组长一点
+        if (nums1.size() - begin1 > nums2.size() - begin2) {        // 这里要保证第二个数组长一点
             return getKth(nums2, begin2, nums1, begin1, k);
         }
         if (k == 1) {
@@ -123,8 +123,47 @@ public:
             int right = getKth(nums1, 0, nums2, 0, mid + 1);
             return (left + right) / 2.0;
         } else {
-            return getKth(nums1, 0, nums2, 0, mid + 1);     // 需要是下一个
+            return getKth(nums1, 0, nums2, 0, mid + 1);     // 需要是下一个，k记录的是个数，而不是索引
         }
+    }
+};
+
+class Solution {
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        int len1 = nums1.size();
+        int len2 = nums2.size();
+        if ((len1 + len2) % 2 == 1) {
+            return getKth(nums1, 0, nums2, 0, (len1 + len2) / 2 + 1);
+        } else {
+            int left = getKth(nums1, 0, nums2, 0, (len1 + len2) / 2);
+            int right = getKth(nums1, 0, nums2, 0, (len1 + len2) / 2 + 1);
+            return (left + right) / 2.0;
+        }
+    }
+
+    double getKth(std::vector<int>& nums1, int begin1, std::vector<int>& nums2, int begin2, int k) {
+        // 当数组1已经到达边界，则返回数组2中第k个元素
+        if (begin1 == nums1.size()) {
+            return nums2[begin2 + k - 1];
+        }
+        // 保持数组1是比较短的，数组2相对长一些
+        if (nums1.size() - begin1 > nums2.size() - begin2) {
+            return getKth(nums2, begin2, nums1, begin1, k);
+        }
+        // 当需要获取的数据只有一个的时候，直接返回两者之间较小的
+        if (k == 1) {
+            return std::min(nums1[begin1], nums1[begin2]);
+        }
+
+        int next1 = std::min(begin1 + k / 2, (int) nums1.size());
+        int next2 = begin2 + k / 2;
+        if (nums1[next1 - 1] < nums2[next2 - 1]) {
+            return getKth(nums1, next1, nums2, begin2, k - next1 + begin1);
+        } else {
+            return getKth(nums1, begin1, nums2, next2, k - next2 + begin2);
+        }
+
     }
 };
 // @lc code=end
