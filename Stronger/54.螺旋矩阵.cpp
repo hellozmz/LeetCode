@@ -101,29 +101,23 @@ public:
             // 从左上向右上
             for (int i = n; i < col - n - 1; ++i) {
                 result.push_back(matrix[m][i]);
-                // cout << result.back() << " ";
             }
             // 右上向右下
             for (int i = m; i < row - m - 1; ++i) {
                 result.push_back(matrix[i][col - n - 1]);
-                // cout << result.back() << " ";
             }
-            // 右下向左下，不能再走到最下了，当发现这一行已经被处理过了，就只能走到上次没走到的地方
+            // 右下向左下
             for (int i = col - n - 1; i > n; --i) {
                 result.push_back(matrix[row - m - 1][i]);
-                // cout << result.back() << " ";
             }
             // 左下向左上
             for (int i = row - m - 1; i > m; --i) {
                 result.push_back(matrix[i][n]);
-                // cout << result.back() << " ";
             }
 
-            // cout << endl << "m" << m << ",n" << n << endl;
             ++m;
             ++n;
         }
-        // cout << "out" << endl;
 
         if (row < col) {
             // 偶数行的时候，正好可以遍历完毕，当奇数行的时候，需要手动的再遍历下
@@ -140,7 +134,6 @@ public:
                 }
             }
         }
-        // cout << result.back() << " ";
         return result;
     }
 };
