@@ -65,7 +65,7 @@
 // @lc code=start
 class Solution {
 public:
-    string minWindow(string s, string t) {
+    string minWindow0(string s, string t) {
         // 记录返回的字符串，需要维护起始和长度
         // 为了提升效率，将要比较的元素都给放到hash表中维护
         // 滑动窗口需要维护左右边界
@@ -105,6 +105,42 @@ public:
 
         return len == INT_MAX ? "" : s.substr(start, len);
     }
+
+    string minWindow(string s, string t) {
+        int len = s.size();
+        std::unordered_map<char, int> need;
+        std::unordered_map<char, int> windows;
+        for (auto ch : t) {
+            ++need[ch];
+        }
+        int start = 0, end = INT_MAX;
+        bool found = false;
+        int left = 0, right = 0;
+        int match_count = 0;
+        while (right < len) {
+            char ch = s[right];
+            ++windows[ch];
+            if (need.count(ch) > 0 && windows[ch] == need[ch]) {
+                ++match_count;
+            }
+            while (left < right && match_count == need.size()) {
+                if (end - start > right - left) {
+                    end = right;
+                    start = left;
+                    found = true;
+                }
+                char ch = s[left];
+                --windows[ch];
+                if (need.count(ch) > 0 && windows[ch] < need[ch]) {
+                    --match_count;
+                }
+                ++left;
+            }
+            ++right;
+        }
+        return found ? s.substr(start, end - start) : "";
+    }
+
 };
 // @lc code=end
 
