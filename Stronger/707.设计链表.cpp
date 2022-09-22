@@ -71,6 +71,7 @@ private:
 public:
     MyLinkedList() {
         dummyHead = new Node(0);
+        tail = dummyHead;
         len = 0;
     }
     
@@ -81,9 +82,9 @@ public:
         }
         Node* cur = dummyHead;
         while (index-- >= 0) {
-            cout << "cur " << cur->val << endl;
             cur = cur->next;
         }
+        // printNodes();
         return cur->val;
     }
     
@@ -92,6 +93,10 @@ public:
         node->next = dummyHead->next;
         dummyHead->next = node;
         ++len;
+        if (len == 1) {
+            tail = node;
+        }
+        // printNodes();
     }
     
     void addAtTail(int val) {
@@ -99,6 +104,7 @@ public:
         tail->next = node;
         tail = node;
         ++len;
+        // printNodes();
     }
     
     void addAtIndex(int index, int val) {
@@ -106,6 +112,8 @@ public:
             return;
         } else if (index < 0) {
             addAtHead(val);
+        } else if (index == len) {
+            addAtTail(val);
         } else {
             Node* cur = dummyHead;
             // 要找对索引前面一个的节点
@@ -117,18 +125,41 @@ public:
             cur->next = node;
             ++len;
         }
+        // printNodes();
     }
     
     void deleteAtIndex(int index) {
         if (index >= len || index < 0) {
             return;
+        } else if (index == 0) {
+            Node* node = dummyHead->next;
+            dummyHead->next = node->next;
+            --len;
+            delete node;
+        } else {
+            int tmp = index;
+            Node* cur = dummyHead;
+            while (index-- > 0) {
+                cur = cur->next;
+            }
+            Node* toBeDelete = cur->next;
+            cur->next = toBeDelete->next;
+            if (tmp == len - 1) {
+                tail = cur;
+            }
+            --len;
+            delete toBeDelete;
         }
-        Node* cur = dummyHead;
-        while (index-- > 0) {
-            cur = cur->next;
+        // printNodes();
+    }
+
+    void printNodes() {
+        Node* ptr = dummyHead->next;
+        while (ptr != nullptr) {
+            cout << ptr->val << " ";
+            ptr = ptr->next;
         }
-        cur->next = cur->next->next;
-        --len;
+        cout << endl;
     }
 };
 
