@@ -75,9 +75,21 @@ public:
  * @param head 
  * @return ListNode* 
  */
-    ListNode* reverseList(ListNode* head) {
+    ListNode* reverseList0(ListNode* head) {
         ListNode* ptr = nullptr;            // 记录新的链表
         ListNode* cur = head;               // 记录要遍历的元素
+        ListNode* next = nullptr;
+        while (cur) {
+            next = cur->next;
+            cur->next = ptr;
+            ptr = cur;
+            cur = next;
+        }
+        return ptr;
+    }
+    ListNode* reverseList(ListNode* head) {
+        ListNode* ptr = nullptr;
+        ListNode* cur = head;
         ListNode* next = nullptr;
         while (cur) {
             next = cur->next;

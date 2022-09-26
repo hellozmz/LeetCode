@@ -85,7 +85,7 @@ class Solution {
     // 题目并不是难题，主要是需要注意，在找到了快慢指针交点之后，
     // 还需要走多久可以到达环的位置
 public:
-    ListNode *detectCycle(ListNode *head) {
+    ListNode *detectCycle0(ListNode *head) {
         ListNode* fast = head, *slow = head;
         while (fast != nullptr && fast->next != nullptr) {
             fast = fast->next->next;
@@ -93,6 +93,23 @@ public:
             if (fast == slow) {
                 fast = head;
                 while (fast != slow) {
+                    fast = fast->next;
+                    slow = slow->next;
+                }
+                return fast;
+            }
+        }
+        return nullptr;
+    }
+    ListNode *detectCycle(ListNode *head) {
+        ListNode* fast = head;
+        ListNode* slow = head;
+        while (fast && fast->next) {
+            fast= fast->next->next;
+            slow = slow->next;
+            if (fast == slow) {
+                fast = head;
+                while (slow != fast) {
                     fast = fast->next;
                     slow = slow->next;
                 }
