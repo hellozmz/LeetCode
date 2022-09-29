@@ -79,7 +79,7 @@ public:
 
 class Solution {
 public:
-    vector<int> twoSum(vector<int>& nums, int target) {
+    vector<int> twoSum0(vector<int>& nums, int target) {
         std::unordered_map<int, int> mapping;
         for (int i = 0; i < nums.size(); ++i) {
             mapping[nums[i]] = i;
@@ -91,6 +91,53 @@ public:
             }
         }
         return {0, 0};
+    }
+
+
+/**
+ * @brief unordered_multimap 用法真的是大坑
+ * 
+ * @param nums 
+ * @param target 
+ * @return vector<int> 
+ */
+    vector<int> twoSum1(vector<int>& nums, int target) {
+        unordered_multimap<int, int> mapping;
+        for (int i = 0; i < nums.size(); ++i) {
+            // mapping[nums[i]] = i;
+            mapping.insert({nums[i], i});
+        }
+        for (int i = 0; i < nums.size(); ++i) {
+            if (mapping.count(target - nums[i]) > 0) {
+                // 应该使用 mapping.equal_range
+                auto next = mapping.find(target-nums[i]);
+                while (next != mapping.end()) {
+                    // cout << "value = " << next->first << endl;
+                    if (next->first != target - nums[i]) {
+                        break;
+                    }
+                    if (next->second != i) {
+                        // cout << "target = " << target << ", i = " << i << ", next = " << next->second<< ", value=" << next->first << ",expect = " << target - nums[i] << endl;
+                        return vector<int>{i, next->second};
+                    }
+                    ++next;
+                }
+            }
+        }
+        // [1,3,4,2]  \n6
+        return vector<int>{-1, -1};
+    }
+
+    vector<int> twoSum(vector<int>& nums, int target) {
+        unordered_map<int, int> mapping;
+        for (int i = 0; i < nums.size(); ++i) {
+            int other = target - nums[i];
+            if (mapping.count(other) > 0) {
+                return vector<int>{i, mapping.at(other)};
+            }
+            mapping[nums[i]] = i;
+        }
+        return vector<int>{0, 0};
     }
 };
 // @lc code=end

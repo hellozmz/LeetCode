@@ -53,7 +53,7 @@
 // @lc code=start
 class Solution {
 public:
-    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+    vector<vector<string>> groupAnagrams0(vector<string>& strs) {
         vector<vector<string>> result;
         if (strs.empty()) {
             return result;
@@ -72,6 +72,33 @@ public:
                 ++tmp[ch - 'a'];
             }
             mapping[tmp].emplace_back(s);
+        }
+        for (auto& item : mapping) {
+            result.emplace_back(item.second);
+        }
+        return result;
+    }
+
+
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        vector<vector<string>> result;
+        if (strs.empty()) {
+            return result;
+        }
+
+        auto cmp = [fn = hash<int>{}](const array<int, 26>& arr) {
+            return accumulate(arr.begin(), arr.end(), 0u, [&](size_t res, int val) -> size_t {
+                return res * 2 + fn(val);
+            });
+        };
+        unordered_map<array<int, 26>, vector<string>, decltype(cmp)> mapping(0, cmp);
+
+        for (auto& str : strs) {
+            array<int, 26> tmp{};
+            for (auto ch : str) {
+                ++tmp[ch - 'a'];
+            }
+            mapping[tmp].emplace_back(str);
         }
         for (auto& item : mapping) {
             result.emplace_back(item.second);

@@ -94,7 +94,7 @@ public:
 
 class Solution {
 public:
-    vector<vector<int>> threeSum(vector<int>& nums) {
+    vector<vector<int>> threeSum0(vector<int>& nums) {
         int len = nums.size();
         std::vector<std::vector<int>> result;
         std::sort(nums.begin(), nums.end());
@@ -140,6 +140,47 @@ public:
                         --third;
                     }
                 } else if (nums[first] + nums[second] + nums[third] < 0) {
+                    ++second;
+                } else {
+                    --third;
+                }
+            }
+        }
+        return result;
+    }
+
+
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        int len = nums.size();
+        vector<vector<int>> result;
+        sort(nums.begin(), nums.end());
+        if (len < 3 || nums[0] > 0 || nums.back() < 0) {
+            return result;
+        }
+        int first = 0, second = 0, third = 0;
+        for (; first < len - 2; ++first) {
+            if (nums[first] > 0) {
+                return result;
+            }
+            if (first != 0 && nums[first] == nums[first - 1]) {
+                continue;
+            }
+            second = first + 1;
+            third = len - 1;
+            while (second < third) {
+                int sum = nums[first] + nums[second] + nums[third];
+                if (sum == 0) {
+                    result.push_back({nums[first], nums[second], nums[third]});
+
+                    ++second;
+                    while (second < third && nums[second] == nums[second - 1]) {
+                        ++second;
+                    }
+                    --third;
+                    while (second < third && nums[third] == nums[third + 1]) {
+                        --third;
+                    }
+                } else if (sum < 0) {
                     ++second;
                 } else {
                     --third;

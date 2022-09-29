@@ -56,7 +56,7 @@
 // @lc code=start
 class Solution {
 public:
-    bool canConstruct(string ransomNote, string magazine) {
+    bool canConstruct0(string ransomNote, string magazine) {
         vector<int> maHash(26, 0);
         for (auto ch : magazine) {
             ++maHash[ch - 'a'];
@@ -64,6 +64,25 @@ public:
         for (auto ch : ransomNote) {
             --maHash[ch - 'a'];
             if (maHash[ch - 'a'] < 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    bool canConstruct(string ransomNote, string magazine) {
+        unordered_map<char, int> record;
+        vector<int> map(26, 0);
+        for (auto ch : magazine) {
+            // ++record[ch];
+            ++map[ch - 'a'];
+        }
+        for (auto ch : ransomNote) {
+            // --record[ch];
+            --map[ch - 'a'];
+            // if (record[ch] < 0) {
+            if (map[ch - 'a'] < 0) {
                 return false;
             }
         }
