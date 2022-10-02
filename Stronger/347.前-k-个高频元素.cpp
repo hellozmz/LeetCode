@@ -49,7 +49,7 @@
 // @lc code=start
 class Solution {
 public:
-    vector<int> topKFrequent(vector<int>& nums, int k) {
+    vector<int> topKFrequent0(vector<int>& nums, int k) {
         std::vector<int> result;
         if (nums.empty() || k == 0) {
             return result;
@@ -58,6 +58,7 @@ public:
         for (auto i : nums) {
             ++counts[i];
         }
+        // 典型的小顶堆
         auto cmp = [](const std::pair<int, int> &a, const std::pair<int, int> &b) {
             return a.second > b.second;
         };
@@ -72,6 +73,30 @@ public:
         while (!min_heap.empty()) {
             result.push_back(min_heap.top().first);
             min_heap.pop();
+        }
+        return result;
+    }
+
+
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        unordered_map<int, int> counts;
+        for (int i = 0; i < nums.size(); ++i) {
+            ++counts[nums[i]];
+        }
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> q;
+        // greater a.value > b.value。最终的堆是从数组后面向前看的，也就是小顶堆
+        // less a.value < b.value。默认值就是less，也就是左边的值小于右边的值，就是大顶堆
+        for (auto& item : counts) {
+            q.push({item.second, item.first});
+            // cout << item.second << " " << item.first << endl;
+            if (q.size() > k) {
+                q.pop();
+            }
+        }
+        vector<int> result;
+        while (!q.empty()) {
+            result.push_back(q.top().second);
+            q.pop();
         }
         return result;
     }
