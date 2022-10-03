@@ -75,7 +75,7 @@
 // @lc code=start
 class Solution {
 public:
-    int removeElement(vector<int>& nums, int val) {
+    int removeElement0(vector<int>& nums, int val) {
         int len = nums.size();
         int cur = 0, update = 0;
         while (cur < len) {
@@ -88,6 +88,20 @@ public:
             }
         }
         return update;
+    }
+
+    int removeElement(vector<int>& nums, int val) {
+        int a = 0, b = 0, len = nums.size();
+        while (b < len) {
+            if (nums[b] == val) {
+                ++b;
+            } else {
+                nums[a] = nums[b];
+                ++a;
+                ++b;
+            }
+        }
+        return a;
     }
 };
 // @lc code=end
