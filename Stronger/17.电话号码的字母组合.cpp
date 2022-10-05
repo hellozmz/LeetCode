@@ -56,7 +56,7 @@
 // @lc code=start
 class Solution {
 public:
-    vector<string> letterCombinations(string digits) {
+    vector<string> letterCombinations0(string digits) {
         std::vector<std::string> result;
         if (digits.empty()) {
             return result;
@@ -88,6 +88,42 @@ public:
                 bt(digits, mapping, index+1, tmp, result);
                 tmp.pop_back();
             }
+        }
+    }
+
+
+    std::unordered_map<char, std::string> dict{
+        {'2', "abc"},
+        {'3', "def"},
+        {'4', "ghi"},
+        {'5', "jkl"},
+        {'6', "mno"},
+        {'7', "pqrs"},
+        {'8', "tuv"},
+        {'9', "wxyz"}
+    };
+
+    vector<string> letterCombinations(string digits) {
+        vector<string> result;
+        if (digits.empty()) {
+            return result;
+        }
+        string str = "";
+        btNew(result, str, digits, 0);
+        return result;
+    }
+
+    // for循环横向遍历，递归纵向遍历，回溯不断调整结果集。
+    void btNew(vector<string>& result, string& str, string& digits, int index) {
+        if (index == digits.size()) {
+            result.emplace_back(str);
+            return;
+        }
+
+        for (auto ch : dict[digits[index]]) {
+            str.push_back(ch);
+            btNew(result, str, digits, index + 1);
+            str.pop_back();
         }
     }
 };
