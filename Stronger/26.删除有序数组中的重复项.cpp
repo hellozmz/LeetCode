@@ -74,7 +74,7 @@
 // @lc code=start
 class Solution {
 public:
-    int removeDuplicates(vector<int>& nums) {
+    int removeDuplicates0(vector<int>& nums) {
         int len = nums.size();
         if (len < 2) {
             return len;
@@ -90,6 +90,21 @@ public:
             }
         }
         return slow + 1;
+    }
+
+
+    int removeDuplicates(vector<int>& nums) {
+        int a = 0, b = 0, len = nums.size();
+        while (b < len) {
+            if (b != 0 && nums[b] == nums[b - 1]) {
+                ++b;
+            } else {
+                nums[a] = nums[b];
+                ++a;
+                ++b;
+            }
+        }
+        return a;
     }
 };
 // @lc code=end

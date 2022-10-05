@@ -72,7 +72,7 @@
  */
 class Solution {
 public:
-    TreeNode* invertTree(TreeNode* root) {
+    TreeNode* invertTree0(TreeNode* root) {
         dfs(root);
         return root;
     }
@@ -87,6 +87,27 @@ public:
         } else {
             return;
         }
+    }
+
+    TreeNode* invertTree1(TreeNode* root) {
+        if (root) {
+            TreeNode* tmp = root->left;
+            root->left = root->right;
+            root->right = tmp;
+            invertTree(root->left);
+            invertTree(root->right);
+        }
+        return root;
+    }
+
+    TreeNode* invertTree(TreeNode* root) {
+        if (!root) {
+            return root;
+        }
+        swap(root->left, root->right);
+        invertTree(root->left);
+        invertTree(root->right);
+        return root;
     }
 };
 // @lc code=end
