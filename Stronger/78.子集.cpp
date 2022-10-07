@@ -13,41 +13,42 @@
  * Total Submissions: 588.7K
  * Testcase Example:  '[1,2,3]'
  *
- * 给你一个整数数组 nums ，数组中的元素 互不相同 。返回该数组所有可能的子集（幂集）。
- * 
+ * 给你一个整数数组 nums ，数组中的元素 互不相同
+ * 。返回该数组所有可能的子集（幂集）。
+ *
  * 解集 不能 包含重复的子集。你可以按 任意顺序 返回解集。
- * 
- * 
- * 
+ *
+ *
+ *
  * 示例 1：
- * 
- * 
+ *
+ *
  * 输入：nums = [1,2,3]
  * 输出：[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
- * 
- * 
+ *
+ *
  * 示例 2：
- * 
- * 
+ *
+ *
  * 输入：nums = [0]
  * 输出：[[],[0]]
- * 
- * 
- * 
- * 
+ *
+ *
+ *
+ *
  * 提示：
- * 
- * 
- * 1 
- * -10 
+ *
+ *
+ * 1
+ * -10
  * nums 中的所有元素 互不相同
- * 
- * 
+ *
+ *
  */
 
 // @lc code=start
 class Solution {
-public:
+   public:
     vector<vector<int>> subsets0(vector<int>& nums) {
         std::vector<std::vector<int>> result;
         std::vector<int> item;
@@ -55,7 +56,8 @@ public:
         return result;
     }
 
-    void bt(const vector<int>& nums, std::vector<std::vector<int>> &result, std::vector<int> item, int idx) {
+    void bt(const vector<int>& nums, std::vector<std::vector<int>>& result,
+            std::vector<int> item, int idx) {
         if (idx == nums.size()) {
             result.emplace_back(item);
             return;
@@ -68,7 +70,7 @@ public:
         bt(nums, result, item, idx + 1);
     }
 
-    vector<vector<int>> subsets(vector<int>& nums) {
+    vector<vector<int>> subsets1(vector<int>& nums) {
         std::vector<std::vector<int>> result;
         int len = nums.size();
         std::vector<int> item;
@@ -83,6 +85,25 @@ public:
         }
         return result;
     }
+
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<vector<int>> result;
+        vector<int> path;
+        bt(result, path, nums, 0);
+        return result;
+    }
+
+    void bt(vector<vector<int>>& result, vector<int>& path, vector<int>& nums,
+            int startIndex) {
+        // if (!path.empty()) {
+            result.emplace_back(path);
+        // }
+
+        for (int i = startIndex; i < nums.size(); ++i) {
+            path.push_back(nums[i]);
+            bt(result, path, nums, i + 1);
+            path.pop_back();
+        }
+    }
 };
 // @lc code=end
-
