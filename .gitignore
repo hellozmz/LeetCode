@@ -1,2 +1,4 @@
 bazel-*
 .DS_Store
+Stronger/test
+Stronger/test.dSYM
