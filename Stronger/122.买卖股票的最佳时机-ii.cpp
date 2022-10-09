@@ -61,7 +61,7 @@
 // @lc code=start
 class Solution {
 public:
-    int maxProfit(vector<int>& prices) {
+    int maxProfit2(vector<int>& prices) {
         int len = prices.size();
         int buy = INT_MAX;
         bool has = false;
@@ -88,6 +88,17 @@ public:
         int result = 0;
         for (int i = 1; i < prices.size(); ++i) {
             result += max((prices[i] - prices[i-1]), 0);
+        }
+        return result;
+    }
+
+
+    int maxProfit(vector<int>& prices) {
+        int result = 0;
+        for (int i = 1; i < prices.size(); ++i) {
+            if (prices[i] - prices[i-1] > 0) {
+                result += (prices[i] - prices[i-1]);
+            }
         }
         return result;
     }
