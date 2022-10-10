@@ -87,7 +87,7 @@ public:
         }
     }
 
-    bool canPartition(vector<int>& nums) {
+    bool canPartition1(vector<int>& nums) {
         int len = nums.size();
         if (len == 0) { return true; }
         int sum = accumulate(nums.begin(), nums.end(), 0);
@@ -113,13 +113,52 @@ public:
                     dp[i][j] = dp[i - 1][j];
                 }
 
-                if (j == mid && dp[i][j]) {
-                    return true;
-                }
+                if (j == mid && dp[i][j]) { return true; }
             }
         }
         // for (auto& v : dp) {
         //     for (auto i : v) { cout << i << " "; }
+        //     cout << endl;
+        // }
+        // cout << endl;
+        return false;
+    }
+
+    /**
+     * @brief 看了下答案，就是最简单的01背包问题，为什么被我做成那么复杂的问题了
+     * retry
+     *
+     * @param nums
+     * @return true
+     * @return false
+     */
+    bool canPartition(vector<int>& nums) {
+        int len = nums.size();
+        int sum = accumulate(nums.begin(), nums.end(), 0);
+        if (sum % 2) { return false; }
+        int mid = sum / 2;
+        vector<vector<int>> dp(len, vector<int>(mid + 1));
+        for (int j = nums[0]; j <= mid; ++j) { dp[0][j] = nums[0]; }
+        for (auto i : nums) {
+            if (i > mid) {
+                return false;
+            } else if (i == mid) {
+                return true;
+            }
+        }
+        for (int i = 1; i < len; ++i) {
+            for (int j = 0; j <= mid; ++j) {
+                if (j - nums[i] > 0) {
+                    dp[i][j] = max(dp[i - 1][j],
+                                   dp[i - 1][j - nums[i]] + nums[i]);
+                } else {
+                    dp[i][j] = dp[i - 1][j];
+                }
+            }
+        }
+        if (dp[len - 1][mid] == mid) { return true; }
+        // for (auto& v : dp) {
+        //     for (int i : v) { cout << i << " "; }
         //     cout << endl;
         // }
         // cout << endl;
