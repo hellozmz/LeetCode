@@ -97,7 +97,7 @@ public:
      * @param target 
      * @return int 
      */
-    int findTargetSumWays(vector<int>& nums, int target) {
+    int findTargetSumWays1(vector<int>& nums, int target) {
         int sum = accumulate(nums.begin(), nums.end(), 0);
         if (((sum - target) & 1) || (abs(target) > sum)) {
             return 0;
@@ -114,6 +114,7 @@ public:
             for (int j = 0; j <= neg; ++j) {
                 int num = nums[i - 1];
                 if (j - num >= 0) {
+                    // 找可能性
                     dp[i][j] = dp[i - 1][j] + dp[i - 1][j - num];
                 } else {
                     dp[i][j] = dp[i - 1][j];
@@ -121,6 +122,30 @@ public:
             }
         }
         return dp[len][neg];
+    }
+
+
+    int findTargetSumWays(vector<int>& nums, int target) {
+        int len = nums.size();
+        int sum = accumulate(nums.begin(), nums.end(), 0);
+        int diff = sum - target;
+        if (((sum - target) & 1) || (abs(target) > sum)) {
+            return 0;
+        }
+        int mid = diff / 2;
+        vector<int> dp(mid + 1, 0);
+
+        // init
+        dp[0] = 1;
+
+        // dp
+        for (int i = 0; i < len; ++i) {
+            int num = nums[i];
+            for (int j = mid; j >= num; --j) {
+                dp[j] = dp[j] + dp[j - num];
+            }
+        }
+        return dp[mid];
     }
 };
 // @lc code=end
