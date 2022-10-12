@@ -53,13 +53,45 @@
 // @lc code=start
 class Solution {
 public:
-    int climbStairs(int n) {
+    int climbStairs0(int n) {
         if (n <= 2) { return n; }
         vector<int> dp(n + 1);
         dp[1] = 1;
         dp[2] = 2;
         for (int i = 3; i <= n; ++i) { dp[i] = dp[i - 2] + dp[i - 1]; }
         // printVector<int>(dp);
+        return dp[n];
+    }
+
+    int climbStairs1(int n) {
+        if (n <= 2) {
+            return n;
+        }
+        vector<int> dp(n + 1);
+        dp[0] = 0;
+        dp[1] = 1;
+        dp[2] = 2;
+        for (int i = 3; i <= n; ++i) {
+            dp[i] = dp[i - 1] + dp[i - 2];
+        }
+        return dp[n];
+    }
+
+    int climbStairs(int n) {
+        // i 步
+        vector<int> dp(n + 1, 0);
+
+        // init
+        dp[0] = 1;
+
+        // dp
+        for (int i = 1; i <= n; ++i) {
+            int m = min(i , 2);
+            for (int j = 1; j <= m; ++j) {
+                dp[i] = dp[i] + dp[i - j];
+            }
+        }
+
         return dp[n];
     }
 };
