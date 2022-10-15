@@ -60,7 +60,7 @@
 // @lc code=start
 class Solution {
 public:
-    bool wordBreak(string s, vector<string>& wordDict) {
+    bool wordBreak0(string s, vector<string>& wordDict) {
         std::unordered_set<std::string> dict;
         int len = s.size();
         for (auto word : wordDict) {
@@ -77,6 +77,29 @@ public:
             }
         }
         return dp[len];
+    }
+
+    bool wordBreak(string s, vector<string>& wordDict) {
+        int len = s.size();
+        // unordered_set<string> dict;
+        // for (auto& w : wordDict) {
+        //     dict.insert(w);
+        // }
+        vector<int> dp(len + 1, 0);
+
+        // 认为没有元素的时候，是可以匹配成功的
+        dp[0] = 1;
+
+        for (int i = 1; i <= len; ++i) {
+            for (auto& w : wordDict) {
+                int wlen = w.size();
+                if (i >= wlen && s.substr(i - wlen, wlen) == w) {
+                    dp[i] = dp[i] || dp[i - w.size()];
+                }
+            }
+        }
+
+        return dp[len] > 0;
     }
 };
 // @lc code=end

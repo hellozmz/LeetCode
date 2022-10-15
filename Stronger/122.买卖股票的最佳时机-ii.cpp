@@ -93,14 +93,48 @@ public:
     }
 
 
-    int maxProfit(vector<int>& prices) {
+    /**
+     * @brief 贪心
+     * 
+     * @param prices 
+     * @return int 
+     */
+    int maxProfit0(vector<int>& prices) {
         int result = 0;
-        for (int i = 1; i < prices.size(); ++i) {
-            if (prices[i] - prices[i-1] > 0) {
-                result += (prices[i] - prices[i-1]);
-            }
+        int len = prices.size();
+        for (int i = 1; i < len; ++i) {
+            result += max(prices[i] - prices[i -1], 0);
         }
         return result;
+    }
+
+    /**
+     * @brief 动态规划
+     * 股票问题，使用两个元素控制结果，分别是买了和卖了。有点像是dp中树的感觉（树中是否选择）
+     * 
+     * @param prices 
+     * @return int 
+     */
+    int maxProfit(vector<int>& prices) {
+        int len = prices.size();
+
+        // vec: 0，买了，1，卖了
+        vector<vector<int>> dp(len, vector<int>(2, 0));
+
+        // init
+        dp[0][0] = -prices[0];
+        dp[0][1] = 0;
+
+        // dp
+        for (int i = 1; i < len; ++i) {
+            // dp[i][0] = -prices[i];
+            // dp[i][1] = dp[i - 1][1] + max(0, dp[i - 1][0] + prices[i]);
+            dp[i][0] = max(dp[i - 1][0], dp[i - 1][1] - prices[i]);     // 和121相比多了收益
+            dp[i][1] = max(dp[i - 1][1], prices[i] + dp[i - 1][0]);
+        }
+
+        // result
+        return dp[len - 1][1];
     }
 };
 // @lc code=end
