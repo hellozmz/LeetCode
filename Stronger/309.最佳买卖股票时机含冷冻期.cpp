@@ -53,6 +53,12 @@
 // @lc code=start
 class Solution {
 public:
+    /**
+     * @brief 股票题目主要是状态转移方程，横坐标代表的是每次买卖，可以有多次，迭代的方程体现冷冻期的概念
+     * 
+     * @param prices 
+     * @return int 
+     */
     int maxProfit(vector<int>& prices) {
         int len = prices.size();
 
