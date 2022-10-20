@@ -174,8 +174,8 @@ void print1024Candi(vector<int>& input1, vector<string>& input2) {
 }
 
 int main() {
-    vector<int> input1{1024, 1337, 996, 1, 995, 34, 5, 2, 34, 33};
-    vector<string> input2{"|", "^", ">>", "%", "//"};
+    vector<int> input1{1024, 1024, 22, 996, 995, 5, 2, 1337, 33};
+    vector<string> input2{"%", "^", ">>"};
 
     print1024Candi(input1, input2);
 

@@ -55,6 +55,7 @@
  * 0 
  * s 和 t 由英文字母组成
  * 
+ * ""xslledayhxhadmctrliaxqpokyezcfhzaskeykchkmhpyjipxtsuljkwkovmvelvwxzwieeuqnjozrfwmzsylcwvsthnxujvrkszqwtglewkycikdaiocglwzukwovsghkhyidevhbgffoqkpabthmqihcfxxzdejletqjoxmwftlxfcxgxgvpperwbqvhxgsbbkmphyomtbjzdjhcrcsggleiczpbfjcgtpycpmrjnckslrwduqlccqmgrdhxolfjafmsrfdghnatexyanldrdpxvvgujsztuffoymrfteholgonuaqndinadtumnuhkboyzaqguwqijwxxszngextfcozpetyownmyneehdwqmtpjloztswmzzdzqhuoxrblppqvyvsqhnhryvqsqogpnlqfulurexdtovqpqkfxxnqykgscxaskmksivoazlducanrqxynxlgvwonalpsyddqmaemcrrwvrjmjjnygyebwtqxehrclwsxzylbqexnxjcgspeynlbmetlkacnnbhmaizbadynajpibepbuacggxrqavfnwpcwxbzxfymhjcslghmajrirqzjqxpgtgisfjreqrqabssobbadmtmdknmakdigjqyqcruujlwmfoagrckdwyiglviyyrekjealvvigiesnvuumxgsveadrxlpwetioxibtdjblowblqvzpbrmhupyrdophjxvhgzclidzybajuxllacyhyphssvhcffxonysahvzhzbttyeeyiefhunbokiqrpqfcoxdxvefugapeevdoakxwzykmhbdytjbhigffkmbqmqxsoaiomgmmgwapzdosorcxxhejvgajyzdmzlcntqbapbpofdjtulstuzdrffafedufqwsknumcxbschdybosxkrabyfdejgyozwillcxpcaiehlelczioskqtptzaczobvyojdlyflilvwqgyrqmjaeepydrcchfyftjighntqzoo" \n"rwmimatmhydhbujebqehjprrwfkoebcxxqfktayaaeheys""
  * 
  */
 
@@ -62,7 +63,43 @@
 class Solution {
 public:
     int numDistinct(string s, string t) {
+        int row = s.size();
+        int col = t.size();
+        if (row * col == 0) {
+            return 0;
+        }
+        vector<vector<uint32_t>> dp(row + 1, vector<uint32_t>(col + 1, 0));
 
+        // init
+        for (int j = 0; j <= col; ++j) {
+            dp[0][j] = 0;
+        }
+
+        for (int i = 0; i <= row; ++i) {
+            dp[i][0] = 1;
+        }
+
+        // dp
+        for (int i = 1; i <= row; ++i) {
+            for (int j = 1; j <= col; ++j) {
+                if (s[i - 1] == t[j - 1]) {
+                    // 可以使用之前的字符串，也可以使用包含当前字符的字符串
+                    dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
+                } else {
+                    dp[i][j] = dp[i - 1][j];
+                }
+            }
+        }
+
+        // for (auto& v : dp) {
+        //     for (auto i : v) {
+        //         cout << i << " ";
+        //     }
+        //     cout << endl;
+        // }
+        // cout << endl;
+
+        return dp[row][col];
     }
 };
 // @lc code=end
