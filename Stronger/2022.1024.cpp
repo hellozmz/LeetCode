@@ -1,7 +1,11 @@
 #include <cmath>
+#include <climits>
 #include <iostream>
+#include <set>
 #include <string>
 #include <vector>
+#include <unordered_map>
+#include <unordered_set>
 
 using namespace std;
 
@@ -99,6 +103,23 @@ bool notGood(long long value) {
 }
 
 /**
+ * @brief 检查是否是有效的计算
+ * 
+ * @param op 运算符
+ * @param value2 运算中第二个参数
+ * @return true 有效的
+ * @return false 无效的
+ */
+bool isValid(int value2, string op) {
+    if (value2 == 0) {
+        if (op == "%" || op == "//") {
+            return false;
+        }
+    }
+    return true;
+}
+
+/**
  * @brief 计算候选集合的计算结果
  * 
  * @param input1 
@@ -110,12 +131,21 @@ int calculator(vector<int>& input1, vector<string>& input2) {
         cout << "输入数据不满足要求" << endl;
         return -1;
     }
+    if (!isValid(input1[1], input2[0])) {
+        return -1;
+    }
     long long num1 = calUnit(input1[0], input1[1], input2[0]);
     if (notGood(num1)) {
         return -1;
     }
+    if (!isValid(input1[2], input2[1])) {
+        return -1;
+    }
     long long num2 = calUnit(num1, input1[2], input2[1]);
     if (notGood(num2)) {
+        return -1;
+    }
+    if (!isValid(input1[3], input2[2])) {
         return -1;
     }
     long long num3 = calUnit(num2, input1[3], input2[2]);
@@ -146,6 +176,7 @@ bool print1024CandiUnit(vector<int>& nums, vector<string>& ops) {
             << nums[1] << ops[1]
             << nums[2] << ops[2]
             << nums[3] << " = 1024" << endl;
+
         return true;
     }
     return false;
@@ -174,8 +205,8 @@ void print1024Candi(vector<int>& input1, vector<string>& input2) {
 }
 
 int main() {
-    vector<int> input1{1024, 1024, 22, 996, 995, 5, 2, 1337, 33};
-    vector<string> input2{"%", "^", ">>"};
+    vector<int> input1{33,2,0,2,6,2,2,2,2,1024,955};
+    vector<string> input2{"|", ">>", "^", "|", "%", "//", "+"};
 
     print1024Candi(input1, input2);
 
