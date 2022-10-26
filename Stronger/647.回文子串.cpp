@@ -52,7 +52,7 @@
 // @lc code=start
 class Solution {
 public:
-    int countSubstrings(string s) {
+    int countSubstrings0(string s) {
         int len = s.size();
         std::vector<std::vector<char>> dp(len, std::vector<char>(len, false));
         for (int i = 0; i < len; ++i) {
@@ -77,8 +77,44 @@ public:
             }
             // std::cout << "\n";
         }
-        // std::cout <<
-         "\n";
+        // std::cout << "\n";
+        return count;
+    }
+
+    /**
+     * @brief 暴力方法是O(n^3)，动态规划就是为了能降低复杂度，重新试下。
+     * BTW：这应该也是一个hard题目才对呀
+     * 
+     * @param s 
+     * @return int 
+     */
+    int countSubstrings(string s) {
+        int len = s.size();
+        int count = 0;
+        // 从 i->j 是回文串
+        vector<vector<bool>> dp(len, vector<bool>(len, false));
+
+        // dp
+        for (int i = len - 1; i >= 0; --i) {
+            for (int j = i; j < len; ++j) {
+                if (s[i] == s[j]) {
+                    if (i == j) {
+                        dp[i][j] = true;
+                    } else if (j - i == 1) {
+                        dp[i][j] = true;
+                    } else {
+                        dp[i][j] = dp[i + 1][j - 1];
+                    }
+                } else {
+                    dp[i][j] = false;
+                }
+
+                if (dp[i][j]) {
+                    ++count;
+                }
+            }
+        }
+
         return count;
     }
 };
