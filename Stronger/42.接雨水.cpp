@@ -49,9 +49,80 @@
 // @lc code=start
 class Solution {
 public:
+<<<<<<< HEAD
     int trap(vector<int>& height) {
 
+=======
+    /**
+     * @brief 单调栈问题，找到下一个比当前值大的数字。
+     * 相当于是单调栈的一个变种。
+     * 单调栈需要最后将当前值压入栈中
+     * 
+     * @param height 
+     * @return int 
+     */
+    int trap(vector<int>& height) {
+        int len = height.size();
+        if (len <= 2) {
+            return 0;
+        }
+        int result = 0;
+        stack<int> st;
+        st.push(0);
+        for (int i = 1; i < len; ++i) {
+            if (height[i] < height[st.top()]) {
+                st.push(i);
+            } else if (height[i] == height[st.top()]) {
+                st.pop();
+                st.push(i);
+            } else {
+                while (!st.empty() && height[st.top()] < height[i]) {
+                    int mid = st.top();
+                    st.pop();
+                    if (!st.empty()) {
+                        int minHeight = min(height[st.top()], height[i]);
+                        result += (i - st.top() - 1) * (minHeight - height[mid]);
+                    }
+                }
+                st.push(i);
+            }
+        }
+
+        return result;
+>>>>>>> ab8110a150e9aeeda36616fdf116aa88d6982f8f
     }
 };
 // @lc code=end
 
+<<<<<<< HEAD
+=======
+// class Solution {
+// public:
+//     int trap(vector<int>& height) {
+//         if (height.size() <= 2) return 0; // 可以不加
+//         stack<int> st; // 存着下标，计算的时候用下标对应的柱子高度
+//         st.push(0);
+//         int sum = 0;
+//         for (int i = 1; i < height.size(); i++) {
+//             if (height[i] < height[st.top()]) {     // 情况一
+//                 st.push(i);
+//             } if (height[i] == height[st.top()]) {  // 情况二
+//                 st.pop(); // 其实这一句可以不加，效果是一样的，但处理相同的情况的思路却变了。
+//                 st.push(i);
+//             } else {                                // 情况三
+//                 while (!st.empty() && height[i] > height[st.top()]) { // 注意这里是while
+//                     int mid = st.top();
+//                     st.pop();
+//                     if (!st.empty()) {
+//                         int h = min(height[st.top()], height[i]) - height[mid];
+//                         int w = i - st.top() - 1; // 注意减一，只求中间宽度
+//                         sum += h * w;
+//                     }
+//                 }
+//                 st.push(i);
+//             }
+//         }
+//         return sum;
+//     }
+// };
+>>>>>>> ab8110a150e9aeeda36616fdf116aa88d6982f8f
