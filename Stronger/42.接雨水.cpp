@@ -49,10 +49,6 @@
 // @lc code=start
 class Solution {
 public:
-<<<<<<< HEAD
-    int trap(vector<int>& height) {
-
-=======
     /**
      * @brief 单调栈问题，找到下一个比当前值大的数字。
      * 相当于是单调栈的一个变种。
@@ -89,13 +85,10 @@ public:
         }
 
         return result;
->>>>>>> ab8110a150e9aeeda36616fdf116aa88d6982f8f
     }
 };
 // @lc code=end
 
-<<<<<<< HEAD
-=======
 // class Solution {
 // public:
 //     int trap(vector<int>& height) {
@@ -125,4 +118,3 @@ public:
 //         return sum;
 //     }
 // };
->>>>>>> ab8110a150e9aeeda36616fdf116aa88d6982f8f
