@@ -86,7 +86,7 @@ public:
     }
 
 
-    bool splitArraySameAverage(vector<int>& nums) {
+    bool splitArraySameAverage1(vector<int>& nums) {
         int n = nums.size(), m = n / 2;
         // 求和
         int sum = accumulate(nums.begin(), nums.end(), 0);
@@ -116,6 +116,30 @@ public:
                 } 
             }
         }
+        return false;
+    }
+
+
+    bool splitArraySameAverage(vector<int>& nums) {
+        int len = nums.size();
+        int sum = accumulate(nums.begin(), nums.end(), 0);
+        vector<unordered_set<long>> dp(len + 1);
+
+        dp[0].insert(0);
+        for (auto num : nums) {
+            // 注意，这里遍历的时候，不能指定成全部长度len。因为要有两组数据，不能其中一组为空
+            for (int i = len - 1; i >= 1; --i) {
+                for (auto v : dp[i - 1]) {
+                    int curr = v + num;
+                    if (curr * len == sum * i) {
+                        // cout << "curr = " << curr << ", len = " << len << ", sum = " << sum << ", i = " << i << endl;
+                        return true;
+                    }
+                    dp[i].insert(curr);
+                }
+            }
+        }
+
         return false;
     }
 };
