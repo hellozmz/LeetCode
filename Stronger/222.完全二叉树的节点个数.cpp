@@ -72,11 +72,31 @@
  */
 class Solution {
 public:
-    int countNodes(TreeNode* root) {
+    int countNodes0(TreeNode* root) {
         if (!root) {
             return 0;
         }
         return 1 + countNodes(root->left) + countNodes(root->right);
+    }
+
+    int countNodes1(TreeNode* root) {
+        if (!root) {
+            return 0;
+        }
+
+        return 1 + countNodes(root->left) + countNodes(root->right);
+    }
+
+    int countNodes(TreeNode* root) {
+        if (!root) {
+            return 0;
+        }
+
+        // 后序遍历
+        int left = countNodes(root->left);
+        int right = countNodes(root->right);
+
+        return 1 + left + right;
     }
 };
 // @lc code=end

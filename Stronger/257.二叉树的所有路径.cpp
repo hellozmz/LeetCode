@@ -57,7 +57,7 @@
  */
 class Solution {
 public:
-    vector<string> binaryTreePaths(TreeNode* root) {
+    vector<string> binaryTreePaths0(TreeNode* root) {
         vector<string> result;
         helper(root, "", result);
         return result;
@@ -76,6 +76,34 @@ public:
         }
         helper(root->left, str, result);
         helper(root->right, str, result);
+    }
+
+
+    vector<string> binaryTreePaths(TreeNode* root) {
+        vector<string> result;
+        string path = "";
+        bt(root, path, result);
+        return result;
+    }
+
+    void bt(TreeNode* root, string path, vector<string>& result) {
+        if (!root) {
+            return;
+        }
+
+        // fill
+        string localStr = "";
+        if (!path.empty()) {
+            localStr = "->";
+        }
+        localStr += (std::to_string(root->val));
+
+        if (!root->left && !root->right) {
+            result.emplace_back(path + localStr);
+        }
+
+        bt(root->left, path + localStr, result);
+        bt(root->right, path + localStr, result);
     }
 };
 // @lc code=end

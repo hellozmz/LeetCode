@@ -69,7 +69,7 @@
  */
 class Solution {
 public:
-    bool isBalanced(TreeNode* root) {
+    bool isBalanced0(TreeNode* root) {
         if (!root) {
             return true;
         }
@@ -81,10 +81,30 @@ public:
         return isBalanced(root->left) && isBalanced(root->right);
     }
 
+    int depth0(TreeNode* root) {
+        if (!root) {
+            return 0;
+        }
+        return 1 + max(depth(root->left), depth(root->right));
+    }
+
+    bool isBalanced(TreeNode* root) {
+        if (!root) {
+            return true;
+        }
+
+        int leftDep = depth(root->left);
+        int rightDep = depth(root->right);
+        bool balanced = abs(leftDep - rightDep) <= 1;
+
+        return balanced && isBalanced(root->left) && isBalanced(root->right);
+    }
+
     int depth(TreeNode* root) {
         if (!root) {
             return 0;
         }
+
         return 1 + max(depth(root->left), depth(root->right));
     }
 };

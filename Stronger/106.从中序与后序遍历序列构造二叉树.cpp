@@ -23,7 +23,9 @@
  *
  * 输入：inorder = [9,3,15,20,7], postorder = [9,15,7,20,3]
  * 输出：[3,9,20,null,null,15,7]
- *
+ *         3
+ *     9       20
+ *  n    n  15    7
  *
  * 示例 2:
  *
@@ -63,7 +65,7 @@
  */
 class Solution {
 public:
-    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+    TreeNode* buildTree0(vector<int>& inorder, vector<int>& postorder) {
         // 根据后序，从后向前，找到根节点，在中序遍历中找到左右
         int postIndex = postorder.size() - 1;
         return dfs(inorder, 0, postIndex, postorder, 0, postIndex);
@@ -90,6 +92,47 @@ public:
                     break;
                 }
             }
+            return root;
+        }
+    }
+
+
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        if (inorder.empty()) {
+            return nullptr;
+        }
+        int end = inorder.size() - 1;
+        TreeNode* root = helper(inorder, 0, end, postorder, 0, end);
+        return root;
+    }
+    /**
+     * @brief 通过后序的数组，找到顶点，然后从中序中找到目标
+     * 
+     * @param inorder 
+     * @param ib 
+     * @param ie 
+     * @param postorder 
+     * @param pb 
+     * @param pe 
+     * @return TreeNode* 
+     */
+    TreeNode* helper(vector<int>& inorder, int ib, int ie, vector<int>& postorder, int pb, int pe) {
+        if (ib == ie) {
+            return new TreeNode(inorder[ib]);
+        } else if (ib > ie) {
+            return nullptr;
+        } else {
+            int rootValue = postorder[pe];
+            int rootIndex = ib;
+            for (int i = ib; i <= ie; ++i) {
+                if (rootValue == inorder[i]) {
+                    rootIndex = i;
+                    break;
+                }
+            }
+            TreeNode* root = new TreeNode(rootValue);
+            root->left = helper(inorder, ib, rootIndex - 1, postorder, pb, pb + rootIndex - ib - 1);
+            root->right = helper(inorder, rootIndex + 1, ie, postorder, pb + rootIndex - ib, pe - 1);
             return root;
         }
     }
