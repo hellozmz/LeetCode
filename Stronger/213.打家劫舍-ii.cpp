@@ -94,6 +94,21 @@ public:
 
         return dp[len];
     }
+
+    int robRange(const vector<int>& nums, int begin, int end) {
+        if (begin == end) {
+            return nums[begin];
+        }
+
+        vector<int> dp(end + 1, 0);
+        dp[begin] = nums[begin];
+        dp[begin + 1] = max(nums[begin], nums[begin + 1]);
+        for (int i = begin + 2; i <= end; ++i) {
+            dp[i] = max(dp[i-1], dp[i-2] + nums[i]);
+        }
+
+        return dp[end];
+    }
 };
 // @lc code=end
 

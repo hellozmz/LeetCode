@@ -25,7 +25,9 @@
  * 示例 1:
  * 
  * 
- * 
+ *    3
+ *   2  3
+ * n  3 n 1
  * 
  * 输入: root = [3,2,3,null,3,null,1]
  * 输出: 7 
@@ -142,7 +144,7 @@ public:
      * @return int 
      */
     int rob(TreeNode* root) {
-        auto result = robTree2(root);
+        auto result = robTree3(root);
         return max(result[0], result[1]);
     }
 
@@ -167,6 +169,22 @@ public:
         noCurr = max(left[0], left[1]) + max(right[0], right[1]);
 
         return {noCurr, containCurr};
+    }
+
+    vector<int> robTree3(TreeNode* root) {
+        if (!root) {
+            return {0, 0};
+        }
+
+        vector<int> left = robTree3(root->left);
+        vector<int> right = robTree3(root->right);
+        int containRoot = 0, notCotainRoot = 0;
+        // 包含父节点，不包含子节点
+        containRoot = root->val + left[1] + right[1];
+        // 不包含父节点，包含子节点
+        notCotainRoot = max(left[0], left[1]) + max(right[0], right[1]);
+
+        return vector<int>{containRoot, notCotainRoot};
     }
 };
 // @lc code=end

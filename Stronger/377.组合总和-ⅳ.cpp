@@ -70,7 +70,7 @@ public:
      * @param target 
      * @return int 
      */
-    int combinationSum4(vector<int>& nums, int target) {
+    int combinationSum40(vector<int>& nums, int target) {
         int len = nums.size();
         vector<int> dp(target + 1, 0);
 
@@ -87,6 +87,21 @@ public:
                 }
             }
         }
+        return dp[target];
+    }
+
+
+    int combinationSum4(vector<int>& nums, int target) {
+        vector<long long> dp(target + 1, 0);
+        dp[0] = 1;
+        for (int i = 0; i <= target; ++i) {
+            for (int j = 0; j < nums.size(); ++j) {
+                if (i - nums[j] >= 0 && dp[i] < INT_MAX - dp[i - nums[j]]) {
+                    dp[i] += dp[i - nums[j]];
+                }
+            }
+        }
+
         return dp[target];
     }
 };
