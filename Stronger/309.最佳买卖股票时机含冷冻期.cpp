@@ -59,7 +59,7 @@ public:
      * @param prices 
      * @return int 
      */
-    int maxProfit(vector<int>& prices) {
+    int maxProfit0(vector<int>& prices) {
         int len = prices.size();
 
         // vector: 0 买，1 卖
@@ -87,6 +87,29 @@ public:
         // cout << endl;
 
         return dp[len][1];
+    }
+
+
+    // 0: 买入状态
+    // 1: 卖出状态
+    // 2: 冷静期
+    int maxProfit(vector<int>& prices) {
+        int len = prices.size();
+        vector<vector<int>> dp(len, vector<int>(3, 0));
+        dp[0][0] = -prices[0];
+        for (int i = 1; i < len; ++i) {
+            dp[i][0] = max(dp[i-1][0], dp[i-1][1] - prices[i]);
+            dp[i][1] = max(dp[i-1][1], dp[i-1][2]);
+            dp[i][2] = max(dp[i-1][2], dp[i-1][0] + prices[i]);
+        }
+        // for (auto v : dp) {
+        //     for (auto i : v) {
+        //         cout << i << " ";
+        //     }
+        //     cout << endl;
+        // }
+        cout << endl;
+        return max(dp[len - 1][1], dp[len - 1][2]);
     }
 };
 // @lc code=end

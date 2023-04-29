@@ -74,7 +74,7 @@ public:
      * @param prices 
      * @return int 
      */
-    int maxProfit(vector<int>& prices) {
+    int maxProfit1(vector<int>& prices) {
         int len = prices.size();
         if (len < 2) {
             return 0;
@@ -93,6 +93,18 @@ public:
         }
 
         return dp[len - 1][1];
+    }
+
+
+    int maxProfit(vector<int>& prices) {
+        int buy = INT_MAX;
+        int result = 0;
+        for (auto& p : prices) {
+            buy = min(buy, p);
+            result = max(result, p - buy);
+        }
+
+        return result;
     }
 };
 // @lc code=end

@@ -87,7 +87,7 @@ public:
         }
         return ptr;
     }
-    ListNode* reverseList(ListNode* head) {
+    ListNode* reverseList1(ListNode* head) {
         ListNode* ptr = nullptr;
         ListNode* cur = head;
         ListNode* next = nullptr;
@@ -98,6 +98,21 @@ public:
             cur = next;
         }
         return ptr;
+    }
+
+
+    ListNode* reverseList(ListNode* head) {
+        ListNode* dummy = new ListNode(-1);
+        ListNode* next = nullptr;       // 下一个
+        ListNode* cur = head;           // 当前
+        while (cur) {
+            next = cur->next;
+            cur->next = dummy->next;
+            dummy->next = cur;
+            cur = next;
+        }
+
+        return dummy->next;
     }
 };
 // @lc code=end
